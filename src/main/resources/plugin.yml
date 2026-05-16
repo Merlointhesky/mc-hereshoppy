@@ -1,0 +1,16 @@
+name: HereShoppy
+version: 1.0.0
+main: com.hereshoppy.hereshoppy.HereShoppyPlugin
+api-version: '1.21'
+description: A comprehensive economy, shop progression, and item generation plugin.
+commands:
+  hereshoppy:
+    description: Main command for HereShoppy
+    usage: /hereshoppy <shop|info|reload>
+permissions:
+  hereshoppy.use:
+    description: Allows use of HereShoppy commands
+    default: true
+  hereshoppy.admin:
+    description: Allows administrative HereShoppy commands
+    default: op

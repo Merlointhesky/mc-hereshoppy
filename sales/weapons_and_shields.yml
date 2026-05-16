@@ -1,0 +1,15 @@
+WOODEN_SWORD:
+  material: WOODEN_SWORD
+  required_shop_level: 0
+STONE_SWORD:
+  material: STONE_SWORD
+  required_shop_level: 5
+IRON_SWORD:
+  material: IRON_SWORD
+  required_shop_level: 10
+DIAMOND_SWORD:
+  material: DIAMOND_SWORD
+  required_shop_level: 20
+SHIELD:
+  material: SHIELD
+  required_shop_level: 5
