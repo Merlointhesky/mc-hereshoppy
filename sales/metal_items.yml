@@ -1,0 +1,64 @@
+iron:
+  iron_ingot:
+    material: IRON_INGOT
+    required_shop_level: 15
+  iron_block:
+    material: IRON_BLOCK
+    required_shop_level: 25
+  iron_bars:
+    material: IRON_BARS
+    required_shop_level: 15
+  iron_door:
+    material: IRON_DOOR
+    required_shop_level: 20
+  iron_trapdoor:
+    material: IRON_TRAPDOOR
+    required_shop_level: 20
+  bucket:
+    material: BUCKET
+    required_shop_level: 15
+  water_bucket:
+    material: WATER_BUCKET
+    required_shop_level: 20
+  lava_bucket:
+    material: LAVA_BUCKET
+    required_shop_level: 25
+  anvil:
+    material: ANVIL
+    required_shop_level: 30
+gold:
+  gold_ingot:
+    material: GOLD_INGOT
+    required_shop_level: 10
+  gold_block:
+    material: GOLD_BLOCK
+    required_shop_level: 20
+  golden_rail:
+    material: POWERED_RAIL
+    required_shop_level: 20
+  bell:
+    material: BELL
+    required_shop_level: 30
+copper:
+  copper_ingot:
+    material: COPPER_INGOT
+    required_shop_level: 5
+  copper_block:
+    material: COPPER_BLOCK
+    required_shop_level: 10
+  lightning_rod:
+    material: LIGHTNING_ROD
+    required_shop_level: 15
+misc:
+  chain:
+    material: CHAIN
+    required_shop_level: 10
+  hopper:
+    material: HOPPER
+    required_shop_level: 30
+  minecart:
+    material: MINECART
+    required_shop_level: 15
+  cauldron:
+    material: CAULDRON
+    required_shop_level: 15

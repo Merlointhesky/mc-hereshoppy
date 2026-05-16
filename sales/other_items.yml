@@ -1,0 +1,81 @@
+misc:
+  saddle:
+    material: SADDLE
+    required_shop_level: 20
+  name_tag:
+    material: NAME_TAG
+    required_shop_level: 15
+  lead:
+    material: LEAD
+    required_shop_level: 10
+  armor_stand:
+    material: ARMOR_STAND
+    required_shop_level: 15
+  item_frame:
+    material: ITEM_FRAME
+    required_shop_level: 10
+  glow_item_frame:
+    material: GLOW_ITEM_FRAME
+    required_shop_level: 15
+  painting:
+    material: PAINTING
+    required_shop_level: 10
+  book:
+    material: BOOK
+    required_shop_level: 5
+  writable_book:
+    material: WRITABLE_BOOK
+    required_shop_level: 10
+  feather:
+    material: FEATHER
+    required_shop_level: 0
+  ink_sac:
+    material: INK_SAC
+    required_shop_level: 5
+  glow_ink_sac:
+    material: GLOW_INK_SAC
+    required_shop_level: 10
+  paper:
+    material: PAPER
+    required_shop_level: 5
+  leather:
+    material: LEATHER
+    required_shop_level: 5
+  firework_rocket:
+    material: FIREWORK_ROCKET
+    required_shop_level: 25
+  firework_star:
+    material: FIREWORK_STAR
+    required_shop_level: 20
+storage:
+  shulker_box:
+    material: SHULKER_BOX
+    required_shop_level: 70
+  ender_chest:
+    material: ENDER_CHEST
+    required_shop_level: 50
+  bundle:
+    material: BUNDLE
+    required_shop_level: 20
+decor:
+  candle:
+    material: CANDLE
+    required_shop_level: 5
+  lantern:
+    material: LANTERN
+    required_shop_level: 10
+  soul_lantern:
+    material: SOUL_LANTERN
+    required_shop_level: 15
+  torch:
+    material: TORCH
+    required_shop_level: 0
+  soul_torch:
+    material: SOUL_TORCH
+    required_shop_level: 10
+  scaffolding:
+    material: SCAFFOLDING
+    required_shop_level: 20
+  totem_of_undying:
+    material: TOTEM_OF_UNDYING
+    required_shop_level: 90

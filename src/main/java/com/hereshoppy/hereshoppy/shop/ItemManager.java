@@ -39,25 +39,41 @@ public class ItemManager {
                 List<Material> categoryItems = new ArrayList<>();
                 FileConfiguration config = YamlConfiguration.loadConfiguration(file);
                 for (String key : config.getKeys(false)) {
-                    ConfigurationSection section = config.getConfigurationSection(key);
-                    if (section != null) {
-                        try {
-                            Material material = Material.valueOf(section.getString("material", key).toUpperCase());
-                            int requiredLevel = section.getInt("required_shop_level", 0);
-                            
-                            // Calculate buy price: Level 0 -> 1, Level N -> N
-                            double buyPrice = (requiredLevel == 0) ? 1 : requiredLevel;
-                            
-                            ShopItem item = new ShopItem(material, buyPrice, requiredLevel);
-                            items.put(material, item);
-                            categoryItems.add(material);
-                        } catch (IllegalArgumentException e) {
-                            plugin.getLogger().warning("Invalid material in " + file.getName() + ": " + key);
+                    ConfigurationSection mainSection = config.getConfigurationSection(key);
+                    if (mainSection != null) {
+                        // Check if it's a direct item or a category of materials
+                        if (mainSection.contains("material")) {
+                            // Direct item
+                            loadItem(mainSection, key, categoryItems, file.getName());
+                        } else {
+                            // Nested materials
+                            for (String subKey : mainSection.getKeys(false)) {
+                                ConfigurationSection subSection = mainSection.getConfigurationSection(subKey);
+                                if (subSection != null) {
+                                    loadItem(subSection, subKey, categoryItems, file.getName());
+                                }
+                            }
                         }
                     }
                 }
                 categories.put(categoryName, categoryItems);
             }
+        }
+    }
+
+    private void loadItem(ConfigurationSection section, String key, List<Material> categoryItems, String fileName) {
+        try {
+            Material material = Material.valueOf(section.getString("material", key).toUpperCase());
+            int requiredLevel = section.getInt("required_shop_level", 0);
+            
+            // Calculate buy price: Level 0 -> 1, Level N -> N
+            double buyPrice = (requiredLevel == 0) ? 1 : requiredLevel;
+            
+            ShopItem item = new ShopItem(material, buyPrice, requiredLevel);
+            items.put(material, item);
+            categoryItems.add(material);
+        } catch (IllegalArgumentException e) {
+            plugin.getLogger().warning("Invalid material in " + fileName + ": " + key);
         }
     }
 
@@ -99,7 +115,11 @@ public class ItemManager {
     }
 
     public double calculateSellPrice(ItemStack itemStack) {
-        // Base sale is 1 Kroin per stack
+        if (itemStack.getAmount() < itemStack.getMaxStackSize()) {
+            return 0;
+        }
+        
+        // Base sale is 1 Kroin per full stack
         double basePrice = 1.0;
         double enchantBonus = 0;
         

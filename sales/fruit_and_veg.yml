@@ -1,0 +1,67 @@
+fruit:
+  apple:
+    material: APPLE
+    required_shop_level: 0
+  melon_slice:
+    material: MELON_SLICE
+    required_shop_level: 0
+  sweet_berries:
+    material: SWEET_BERRIES
+    required_shop_level: 0
+  glow_berries:
+    material: GLOW_BERRIES
+    required_shop_level: 5
+  chorus_fruit:
+    material: CHORUS_FRUIT
+    required_shop_level: 30
+veg:
+  carrot:
+    material: CARROT
+    required_shop_level: 0
+  potato:
+    material: POTATO
+    required_shop_level: 0
+  beetroot:
+    material: BEETROOT
+    required_shop_level: 0
+  dried_kelp:
+    material: DRIED_KELP
+    required_shop_level: 0
+  pumpkin:
+    material: PUMPKIN
+    required_shop_level: 5
+  melon:
+    material: MELON
+    required_shop_level: 5
+prepared:
+  baked_potato:
+    material: BAKED_POTATO
+    required_shop_level: 5
+  bread:
+    material: BREAD
+    required_shop_level: 5
+  pumpkin_pie:
+    material: PUMPKIN_PIE
+    required_shop_level: 10
+  cookie:
+    material: COOKIE
+    required_shop_level: 10
+  mushroom_stew:
+    material: MUSHROOM_STEW
+    required_shop_level: 5
+  rabbit_stew:
+    material: RABBIT_STEW
+    required_shop_level: 15
+  beetroot_soup:
+    material: BEETROOT_SOUP
+    required_shop_level: 5
+luxury:
+  golden_apple:
+    material: GOLDEN_APPLE
+    required_shop_level: 40
+  enchanted_golden_apple:
+    material: ENCHANTED_GOLDEN_APPLE
+    required_shop_level: 90
+  golden_carrot:
+    material: GOLDEN_CARROT
+    required_shop_level: 30

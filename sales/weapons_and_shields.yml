@@ -1,15 +1,57 @@
-WOODEN_SWORD:
-  material: WOODEN_SWORD
-  required_shop_level: 0
-STONE_SWORD:
-  material: STONE_SWORD
-  required_shop_level: 5
-IRON_SWORD:
-  material: IRON_SWORD
-  required_shop_level: 10
-DIAMOND_SWORD:
-  material: DIAMOND_SWORD
-  required_shop_level: 20
-SHIELD:
-  material: SHIELD
-  required_shop_level: 5
+sword:
+  wooden_sword:
+    material: WOODEN_SWORD
+    required_shop_level: 0
+  stone_sword:
+    material: STONE_SWORD
+    required_shop_level: 5
+  iron_sword:
+    material: IRON_SWORD
+    required_shop_level: 15
+  golden_sword:
+    material: GOLDEN_SWORD
+    required_shop_level: 10
+  diamond_sword:
+    material: DIAMOND_SWORD
+    required_shop_level: 30
+  netherite_sword:
+    material: NETHERITE_SWORD
+    required_shop_level: 70
+axe:
+  wooden_axe:
+    material: WOODEN_AXE
+    required_shop_level: 0
+  stone_axe:
+    material: STONE_AXE
+    required_shop_level: 5
+  iron_axe:
+    material: IRON_AXE
+    required_shop_level: 15
+  golden_axe:
+    material: GOLDEN_AXE
+    required_shop_level: 10
+  diamond_axe:
+    material: DIAMOND_AXE
+    required_shop_level: 30
+  netherite_axe:
+    material: NETHERITE_AXE
+    required_shop_level: 70
+bow:
+  bow:
+    material: BOW
+    required_shop_level: 10
+  crossbow:
+    material: CROSSBOW
+    required_shop_level: 20
+shield:
+  shield:
+    material: SHIELD
+    required_shop_level: 15
+trident:
+  trident:
+    material: TRIDENT
+    required_shop_level: 80
+mace:
+  mace:
+    material: MACE
+    required_shop_level: 90

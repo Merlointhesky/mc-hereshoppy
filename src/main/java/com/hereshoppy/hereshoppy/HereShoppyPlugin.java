@@ -2,6 +2,7 @@ package com.hereshoppy.hereshoppy;
 
 import com.hereshoppy.hereshoppy.command.HereShoppyCommand;
 import com.hereshoppy.hereshoppy.config.DataManager;
+import com.hereshoppy.hereshoppy.listener.ShopListener;
 import com.hereshoppy.hereshoppy.listener.ShippingBinListener;
 import com.hereshoppy.hereshoppy.shop.ItemManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,6 +26,7 @@ public class HereShoppyPlugin extends JavaPlugin {
 
         // Register Listeners
         getServer().getPluginManager().registerEvents(new ShippingBinListener(this), this);
+        getServer().getPluginManager().registerEvents(new ShopListener(), this);
 
         getLogger().info("HereShoppy has been enabled!");
     }

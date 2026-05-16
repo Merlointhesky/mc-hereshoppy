@@ -1,0 +1,109 @@
+stone:
+  stone:
+    material: STONE
+    required_shop_level: 0
+  cobblestone:
+    material: COBBLESTONE
+    required_shop_level: 0
+  smooth_stone:
+    material: SMOOTH_STONE
+    required_shop_level: 5
+  stone_bricks:
+    material: STONE_BRICKS
+    required_shop_level: 5
+  mossy_stone_bricks:
+    material: MOSSY_STONE_BRICKS
+    required_shop_level: 10
+  andesite:
+    material: ANDESITE
+    required_shop_level: 0
+  diorite:
+    material: DIORITE
+    required_shop_level: 0
+  granite:
+    material: GRANITE
+    required_shop_level: 0
+  deepslate:
+    material: DEEPSLATE
+    required_shop_level: 10
+  cobbled_deepslate:
+    material: COBBLED_DEEPSLATE
+    required_shop_level: 10
+dirt:
+  dirt:
+    material: DIRT
+    required_shop_level: 0
+  grass_block:
+    material: GRASS_BLOCK
+    required_shop_level: 5
+  coarse_dirt:
+    material: COARSE_DIRT
+    required_shop_level: 0
+  podzol:
+    material: PODZOL
+    required_shop_level: 10
+  mycelium:
+    material: MYCELIUM
+    required_shop_level: 20
+sand:
+  sand:
+    material: SAND
+    required_shop_level: 0
+  red_sand:
+    material: RED_SAND
+    required_shop_level: 5
+  gravel:
+    material: GRAVEL
+    required_shop_level: 0
+bricks:
+  bricks:
+    material: BRICKS
+    required_shop_level: 15
+  mud_bricks:
+    material: MUD_BRICKS
+    required_shop_level: 10
+  nether_bricks:
+    material: NETHER_BRICKS
+    required_shop_level: 25
+glass:
+  glass:
+    material: GLASS
+    required_shop_level: 5
+  glass_pane:
+    material: GLASS_PANE
+    required_shop_level: 5
+  tinted_glass:
+    material: TINTED_GLASS
+    required_shop_level: 30
+nether:
+  netherrack:
+    material: NETHERRACK
+    required_shop_level: 15
+  soul_sand:
+    material: SOUL_SAND
+    required_shop_level: 20
+  soul_soil:
+    material: SOUL_SOIL
+    required_shop_level: 20
+  basalt:
+    material: BASALT
+    required_shop_level: 25
+  blackstone:
+    material: BLACKSTONE
+    required_shop_level: 25
+  glowstone:
+    material: GLOWSTONE
+    required_shop_level: 30
+end:
+  end_stone:
+    material: END_STONE
+    required_shop_level: 40
+  end_stone_bricks:
+    material: END_STONE_BRICKS
+    required_shop_level: 45
+  purpur_block:
+    material: PURPUR_BLOCK
+    required_shop_level: 50
+  purpur_pillar:
+    material: PURPUR_PILLAR
+    required_shop_level: 50

@@ -1,0 +1,80 @@
+helmet:
+  leather_helmet:
+    material: LEATHER_HELMET
+    required_shop_level: 0
+  chainmail_helmet:
+    material: CHAINMAIL_HELMET
+    required_shop_level: 10
+  iron_helmet:
+    material: IRON_HELMET
+    required_shop_level: 20
+  golden_helmet:
+    material: GOLDEN_HELMET
+    required_shop_level: 15
+  diamond_helmet:
+    material: DIAMOND_HELMET
+    required_shop_level: 40
+  netherite_helmet:
+    material: NETHERITE_HELMET
+    required_shop_level: 80
+chestplate:
+  leather_chestplate:
+    material: LEATHER_CHESTPLATE
+    required_shop_level: 0
+  chainmail_chestplate:
+    material: CHAINMAIL_CHESTPLATE
+    required_shop_level: 10
+  iron_chestplate:
+    material: IRON_CHESTPLATE
+    required_shop_level: 20
+  golden_chestplate:
+    material: GOLDEN_CHESTPLATE
+    required_shop_level: 15
+  diamond_chestplate:
+    material: DIAMOND_CHESTPLATE
+    required_shop_level: 40
+  netherite_chestplate:
+    material: NETHERITE_CHESTPLATE
+    required_shop_level: 80
+leggings:
+  leather_leggings:
+    material: LEATHER_LEGGINGS
+    required_shop_level: 0
+  chainmail_leggings:
+    material: CHAINMAIL_LEGGINGS
+    required_shop_level: 10
+  iron_leggings:
+    material: IRON_LEGGINGS
+    required_shop_level: 20
+  golden_leggings:
+    material: GOLDEN_LEGGINGS
+    required_shop_level: 15
+  diamond_leggings:
+    material: DIAMOND_LEGGINGS
+    required_shop_level: 40
+  netherite_leggings:
+    material: NETHERITE_LEGGINGS
+    required_shop_level: 80
+boots:
+  leather_boots:
+    material: LEATHER_BOOTS
+    required_shop_level: 0
+  chainmail_boots:
+    material: CHAINMAIL_BOOTS
+    required_shop_level: 10
+  iron_boots:
+    material: IRON_BOOTS
+    required_shop_level: 20
+  golden_boots:
+    material: GOLDEN_BOOTS
+    required_shop_level: 15
+  diamond_boots:
+    material: DIAMOND_BOOTS
+    required_shop_level: 40
+  netherite_boots:
+    material: NETHERITE_BOOTS
+    required_shop_level: 80
+wolf_armor:
+  wolf_armor:
+    material: WOLF_ARMOR
+    required_shop_level: 25

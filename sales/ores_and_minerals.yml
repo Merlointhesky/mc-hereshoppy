@@ -1,0 +1,75 @@
+ores:
+  coal_ore:
+    material: COAL_ORE
+    required_shop_level: 5
+  iron_ore:
+    material: IRON_ORE
+    required_shop_level: 15
+  copper_ore:
+    material: COPPER_ORE
+    required_shop_level: 5
+  gold_ore:
+    material: GOLD_ORE
+    required_shop_level: 10
+  redstone_ore:
+    material: REDSTONE_ORE
+    required_shop_level: 15
+  lapis_ore:
+    material: LAPIS_ORE
+    required_shop_level: 20
+  diamond_ore:
+    material: DIAMOND_ORE
+    required_shop_level: 40
+  emerald_ore:
+    material: EMERALD_ORE
+    required_shop_level: 50
+minerals:
+  coal:
+    material: COAL
+    required_shop_level: 0
+  charcoal:
+    material: CHARCOAL
+    required_shop_level: 0
+  raw_iron:
+    material: RAW_IRON
+    required_shop_level: 10
+  raw_copper:
+    material: RAW_COPPER
+    required_shop_level: 0
+  raw_gold:
+    material: RAW_GOLD
+    required_shop_level: 5
+  diamond:
+    material: DIAMOND
+    required_shop_level: 40
+  emerald:
+    material: EMERALD
+    required_shop_level: 50
+  lapis_lazuli:
+    material: LAPIS_LAZULI
+    required_shop_level: 20
+  amethyst_shard:
+    material: AMETHYST_SHARD
+    required_shop_level: 25
+  quartz:
+    material: QUARTZ
+    required_shop_level: 25
+  netherite_scrap:
+    material: NETHERITE_SCRAP
+    required_shop_level: 80
+  netherite_ingot:
+    material: NETHERITE_INGOT
+    required_shop_level: 90
+blocks:
+  coal_block:
+    material: COAL_BLOCK
+    required_shop_level: 5
+  diamond_block:
+    material: DIAMOND_BLOCK
+    required_shop_level: 60
+  emerald_block:
+    material: EMERALD_BLOCK
+    required_shop_level: 70
+  netherite_block:
+    material: NETHERITE_BLOCK
+    required_shop_level: 100

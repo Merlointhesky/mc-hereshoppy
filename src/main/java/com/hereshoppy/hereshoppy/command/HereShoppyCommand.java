@@ -1,6 +1,7 @@
 package com.hereshoppy.hereshoppy.command;
 
 import com.hereshoppy.hereshoppy.HereShoppyPlugin;
+import com.hereshoppy.hereshoppy.gui.ShopGUI;
 import com.hereshoppy.hereshoppy.model.PlayerData;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -41,8 +42,7 @@ public class HereShoppyCommand implements CommandExecutor, TabCompleter {
                     player.sendMessage("§cYou don't have permission.");
                     return true;
                 }
-                // Open Shop GUI (TBD)
-                player.sendMessage("§aOpening Shop... (Not yet implemented)");
+                ShopGUI.openMainMenu(player);
                 return true;
 
             case "info":

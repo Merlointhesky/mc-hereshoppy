@@ -1,0 +1,83 @@
+components:
+  redstone_dust:
+    material: REDSTONE
+    required_shop_level: 10
+  redstone_torch:
+    material: REDSTONE_TORCH
+    required_shop_level: 10
+  redstone_block:
+    material: REDSTONE_BLOCK
+    required_shop_level: 20
+  repeater:
+    material: REPEATER
+    required_shop_level: 15
+  comparator:
+    material: COMPARATOR
+    required_shop_level: 20
+  target:
+    material: TARGET
+    required_shop_level: 15
+  lever:
+    material: LEVER
+    required_shop_level: 5
+  button:
+    oak_button:
+      material: OAK_BUTTON
+      required_shop_level: 5
+    stone_button:
+      material: STONE_BUTTON
+      required_shop_level: 5
+  pressure_plate:
+    oak_pressure_plate:
+      material: OAK_PRESSURE_PLATE
+      required_shop_level: 5
+    stone_pressure_plate:
+      material: STONE_PRESSURE_PLATE
+      required_shop_level: 5
+    heavy_weighted_pressure_plate:
+      material: HEAVY_WEIGHTED_PRESSURE_PLATE
+      required_shop_level: 15
+    light_weighted_pressure_plate:
+      material: LIGHT_WEIGHTED_PRESSURE_PLATE
+      required_shop_level: 15
+mechanisms:
+  piston:
+    material: PISTON
+    required_shop_level: 20
+  sticky_piston:
+    material: STICKY_PISTON
+    required_shop_level: 25
+  dispenser:
+    material: DISPENSER
+    required_shop_level: 20
+  dropper:
+    material: DROPPER
+    required_shop_level: 15
+  observer:
+    material: OBSERVER
+    required_shop_level: 25
+  daylight_detector:
+    material: DAYLIGHT_DETECTOR
+    required_shop_level: 25
+  tnt:
+    material: TNT
+    required_shop_level: 30
+  lamp:
+    material: REDSTONE_LAMP
+    required_shop_level: 20
+  note_block:
+    material: NOTE_BLOCK
+    required_shop_level: 15
+  jukebox:
+    material: JUKEBOX
+    required_shop_level: 40
+sensors:
+  sculk_sensor:
+    material: SCULK_SENSOR
+    required_shop_level: 50
+  calibrated_sculk_sensor:
+    material: CALIBRATED_SCULK_SENSOR
+    required_shop_level: 60
+  sculk_shrieker:
+    material: SCULK_SHRIEKER
+    required_shop_level: 70

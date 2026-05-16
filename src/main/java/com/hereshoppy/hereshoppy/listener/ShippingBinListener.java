@@ -46,15 +46,24 @@ public class ShippingBinListener implements Listener {
 
     private void processInventory(Inventory inv, UUID owner) {
         double totalEarned = 0;
+        int itemsSold = 0;
         for (int i = 0; i < inv.getSize(); i++) {
             ItemStack item = inv.getItem(i);
             if (item != null && item.getType() != Material.AIR) {
-                totalEarned += plugin.getItemManager().calculateSellPrice(item);
-                inv.setItem(i, null);
+                double price = plugin.getItemManager().calculateSellPrice(item);
+                if (price > 0) {
+                    totalEarned += price;
+                    itemsSold += item.getAmount();
+                    inv.setItem(i, null);
+                }
             }
         }
         if (totalEarned > 0) {
             HereshoppyAPI.addKroins(owner, totalEarned);
+            Player player = Bukkit.getPlayer(owner);
+            if (player != null && player.isOnline()) {
+                player.sendMessage("§a§l[Here Sell!] §7Receipt: Sold §e" + itemsSold + " §7items for §e" + String.format("%.2f", totalEarned) + " §7Kroins!");
+            }
         }
     }
 
@@ -120,19 +129,34 @@ public class ShippingBinListener implements Listener {
         
         if (activeBins.containsKey(player.getUniqueId()) && activeBins.get(player.getUniqueId()).equals(inv)) {
             double totalEarned = 0;
-            for (ItemStack item : inv.getContents()) {
+            int itemsSold = 0;
+            for (int i = 0; i < inv.getSize(); i++) {
+                ItemStack item = inv.getItem(i);
                 if (item != null && item.getType() != Material.AIR) {
                     double price = plugin.getItemManager().calculateSellPrice(item);
-                    // User said: "selling any item through the sale box will only reward 1 kroin PER STACK of item."
-                    // My calculateSellPrice handles the enchant bonus on top of 1 Kroin base.
-                    totalEarned += price;
+                    if (price > 0) {
+                        totalEarned += price;
+                        itemsSold += item.getAmount();
+                        inv.setItem(i, null);
+                    }
                 }
             }
             
             if (totalEarned > 0) {
                 HereshoppyAPI.addKroins(player.getUniqueId(), totalEarned);
-                player.sendMessage("§a§l[Here Sell!] §7You earned §e" + String.format("%.2f", totalEarned) + " §7Kroins from your shipment!");
+                player.sendMessage("§a§l[Here Sell!] §7Receipt: Sold §e" + itemsSold + " §7items for §e" + String.format("%.2f", totalEarned) + " §7Kroins!");
             }
+
+            // Return remaining items
+            for (ItemStack remaining : inv.getContents()) {
+                if (remaining != null && remaining.getType() != Material.AIR) {
+                    Map<Integer, ItemStack> leftOver = player.getInventory().addItem(remaining);
+                    for (ItemStack dropped : leftOver.values()) {
+                        player.getWorld().dropItemNaturally(player.getLocation(), dropped);
+                    }
+                }
+            }
+            
             activeBins.remove(player.getUniqueId());
         }
     }

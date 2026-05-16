@@ -1,0 +1,82 @@
+pickaxe:
+  wooden_pickaxe:
+    material: WOODEN_PICKAXE
+    required_shop_level: 0
+  stone_pickaxe:
+    material: STONE_PICKAXE
+    required_shop_level: 5
+  iron_pickaxe:
+    material: IRON_PICKAXE
+    required_shop_level: 15
+  golden_pickaxe:
+    material: GOLDEN_PICKAXE
+    required_shop_level: 10
+  diamond_pickaxe:
+    material: DIAMOND_PICKAXE
+    required_shop_level: 30
+  netherite_pickaxe:
+    material: NETHERITE_PICKAXE
+    required_shop_level: 70
+shovel:
+  wooden_shovel:
+    material: WOODEN_SHOVEL
+    required_shop_level: 0
+  stone_shovel:
+    material: STONE_SHOVEL
+    required_shop_level: 5
+  iron_shovel:
+    material: IRON_SHOVEL
+    required_shop_level: 15
+  golden_shovel:
+    material: GOLDEN_SHOVEL
+    required_shop_level: 10
+  diamond_shovel:
+    material: DIAMOND_SHOVEL
+    required_shop_level: 30
+  netherite_shovel:
+    material: NETHERITE_SHOVEL
+    required_shop_level: 70
+hoe:
+  wooden_hoe:
+    material: WOODEN_HOE
+    required_shop_level: 0
+  stone_hoe:
+    material: STONE_HOE
+    required_shop_level: 5
+  iron_hoe:
+    material: IRON_HOE
+    required_shop_level: 15
+  golden_hoe:
+    material: GOLDEN_HOE
+    required_shop_level: 10
+  diamond_hoe:
+    material: DIAMOND_HOE
+    required_shop_level: 30
+  netherite_hoe:
+    material: NETHERITE_HOE
+    required_shop_level: 70
+special:
+  elytra:
+    material: ELYTRA
+    required_shop_level: 100
+  fishing_rod:
+    material: FISHING_ROD
+    required_shop_level: 5
+  shears:
+    material: SHEARS
+    required_shop_level: 5
+  spyglass:
+    material: SPYGLASS
+    required_shop_level: 10
+  brush:
+    material: BRUSH
+    required_shop_level: 15
+  compass:
+    material: COMPASS
+    required_shop_level: 10
+  recovery_compass:
+    material: RECOVERY_COMPASS
+    required_shop_level: 50
+  clock:
+    material: CLOCK
+    required_shop_level: 10
