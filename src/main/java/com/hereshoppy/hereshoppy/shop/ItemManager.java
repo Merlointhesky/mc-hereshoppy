@@ -89,9 +89,14 @@ public class ItemManager {
             File file = new File(salesDir, fileName);
             if (!file.exists()) {
                 try {
-                    file.createNewFile();
+                    plugin.saveResource("sales/" + fileName, false);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    plugin.getLogger().warning("Could not save " + fileName + " from resources, creating empty file.");
+                    try {
+                        file.createNewFile();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
                 }
             }
         }

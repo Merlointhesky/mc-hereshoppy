@@ -69,14 +69,24 @@ public class ShopGUI {
         List<Material> available = new ArrayList<>();
         List<Material> preview = new ArrayList<>();
         
+        int nextTierLevel = Integer.MAX_VALUE;
         for (Material mat : allMaterials) {
             ItemManager.ShopItem shopItem = plugin.getItemManager().getShopItem(mat);
             if (shopItem == null) continue;
             
             if (shopItem.getRequiredLevel() <= currentLevel) {
                 available.add(mat);
-            } else if (shopItem.getRequiredLevel() == currentLevel + 1 && currentLevel < 100) {
-                preview.add(mat);
+            } else if (shopItem.getRequiredLevel() < nextTierLevel) {
+                nextTierLevel = shopItem.getRequiredLevel();
+            }
+        }
+
+        if (nextTierLevel != Integer.MAX_VALUE) {
+            for (Material mat : allMaterials) {
+                ItemManager.ShopItem shopItem = plugin.getItemManager().getShopItem(mat);
+                if (shopItem != null && shopItem.getRequiredLevel() == nextTierLevel) {
+                    preview.add(mat);
+                }
             }
         }
 
