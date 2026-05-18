@@ -13,10 +13,14 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -28,14 +32,40 @@ public class ShopListener implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player player)) return;
-        Inventory inv = event.getInventory();
-        if (inv.getHolder() == null) return;
+        
+        Inventory topInv = event.getView().getTopInventory();
+        InventoryHolder holder = topInv.getHolder();
+        if (holder == null) return;
+
+        // Ensure we are dealing with our shop
+        if (!(holder instanceof ShopGUI.MainMenuHolder || 
+              holder instanceof ShopGUI.CategoryMenuHolder || 
+              holder instanceof ShopGUI.SearchMenuHolder)) {
+            return;
+        }
+
+        // Prevent "Collect to Cursor" (double-click to grab all) which can bypass inventory checks
+        if (event.getAction() == InventoryAction.COLLECT_TO_CURSOR) {
+            event.setCancelled(true);
+            return;
+        }
+
+        // Check if the clicked inventory is the player's inventory
+        // Raw slots for the top inventory are 0 to topInventory.getSize() - 1
+        if (event.getRawSlot() >= topInv.getSize() || event.getRawSlot() < 0) {
+            // They clicked outside or in their own inventory
+            // We cancel it to prevent them from shift-clicking or moving items into the shop
+            event.setCancelled(true);
+            return;
+        }
 
         ItemStack clicked = event.getCurrentItem();
         if (clicked == null || clicked.getType() == Material.AIR) return;
 
-        if (inv.getHolder() instanceof ShopGUI.MainMenuHolder) {
-            event.setCancelled(true);
+        // All clicks in the shop GUI should be cancelled
+        event.setCancelled(true);
+
+        if (holder instanceof ShopGUI.MainMenuHolder) {
             if (clicked.getType() == Material.ANVIL) {
                 player.closeInventory();
                 player.sendMessage(Component.text("Please type your search query in chat:", NamedTextColor.YELLOW));
@@ -45,19 +75,36 @@ public class ShopListener implements Listener {
             
             ItemMeta meta = clicked.getItemMeta();
             if (meta != null && meta.hasDisplayName()) {
-                String displayName = plainText(meta.displayName());
-                // This is a bit hacky, but let's find the category from the name
                 String category = findCategoryByName(clicked);
                 if (category != null) {
                     ShopGUI.openCategoryMenu(player, category, 0);
                 }
             }
-        } else if (inv.getHolder() instanceof ShopGUI.CategoryMenuHolder holder) {
+        } else if (holder instanceof ShopGUI.CategoryMenuHolder catHolder) {
+            handleCategoryClick(player, clicked, catHolder, event.getSlot());
+        } else if (holder instanceof ShopGUI.SearchMenuHolder searchHolder) {
+            handleSearchClick(player, clicked, searchHolder, event.getSlot());
+        }
+    }
+
+    @EventHandler
+    public void onInventoryDrag(InventoryDragEvent event) {
+        Inventory topInv = event.getView().getTopInventory();
+        InventoryHolder holder = topInv.getHolder();
+        if (holder instanceof ShopGUI.MainMenuHolder || 
+            holder instanceof ShopGUI.CategoryMenuHolder || 
+            holder instanceof ShopGUI.SearchMenuHolder) {
+            
+            // Cancel any drag that affects the top inventory
+            for (int rawSlot : event.getRawSlots()) {
+                if (rawSlot < topInv.getSize()) {
+                    event.setCancelled(true);
+                    return;
+                }
+            }
+            
+            // Also just cancel it generally for safety in the shop
             event.setCancelled(true);
-            handleCategoryClick(player, clicked, holder, event.getSlot());
-        } else if (inv.getHolder() instanceof ShopGUI.SearchMenuHolder holder) {
-            event.setCancelled(true);
-            handleSearchClick(player, clicked, holder, event.getSlot());
         }
     }
 
@@ -134,6 +181,38 @@ public class ShopListener implements Listener {
         ItemManager.ShopItem shopItem = plugin.getItemManager().getShopItem(clicked.getType());
         if (shopItem == null) return;
 
+        // Check if the item is actually buyable (has Price lore)
+        ItemMeta clickedMeta = clicked.getItemMeta();
+        if (clickedMeta == null || clickedMeta.lore() == null) return;
+        
+        boolean isBuyable = false;
+        for (Component line : clickedMeta.lore()) {
+            if (plainText(line).contains("Price:")) {
+                isBuyable = true;
+                break;
+            }
+        }
+        
+        if (!isBuyable) {
+            // Check if it's a locked item
+            for (Component line : clickedMeta.lore()) {
+                if (plainText(line).contains("LOCKED")) {
+                    player.sendMessage(Component.text("This item is locked! You need a higher shop level.", NamedTextColor.RED));
+                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1f, 1f);
+                    return;
+                }
+            }
+            return;
+        }
+
+        // Double check level requirement
+        int playerLevel = HereshoppyAPI.getLevel(player.getUniqueId());
+        if (playerLevel < shopItem.getRequiredLevel()) {
+            player.sendMessage(Component.text("You need shop level " + shopItem.getRequiredLevel() + " to purchase this!", NamedTextColor.RED));
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1f, 1f);
+            return;
+        }
+
         double price = plugin.getItemManager().calculateBuyPrice(clicked);
         double balance = HereshoppyAPI.getKroins(player.getUniqueId());
 
@@ -148,9 +227,15 @@ public class ShopListener implements Listener {
         
         ItemStack toGive = clicked.clone();
         ItemMeta meta = toGive.getItemMeta();
-        // Remove the shop lore
-        meta.lore(null);
-        toGive.setItemMeta(meta);
+        if (meta != null) {
+            // Remove the shop lore
+            meta.lore(null);
+            
+            // Tag with purchase time
+            meta.getPersistentDataContainer().set(plugin.getShopBoughtTimeKey(), PersistentDataType.LONG, System.currentTimeMillis());
+            
+            toGive.setItemMeta(meta);
+        }
         
         player.getInventory().addItem(toGive).values().forEach(remaining -> player.getWorld().dropItemNaturally(player.getLocation(), remaining));
         

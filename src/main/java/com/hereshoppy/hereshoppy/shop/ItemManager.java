@@ -8,6 +8,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.io.File;
 import java.util.*;
@@ -123,6 +124,11 @@ public class ItemManager {
         if (itemStack.getAmount() < itemStack.getMaxStackSize()) {
             return 0;
         }
+
+        // Check cooldown
+        if (getResaleCooldownRemaining(itemStack) > 0) {
+            return -1; // Special value to indicate cooldown
+        }
         
         // Base sale is 1 Kroin per full stack
         double basePrice = 1.0;
@@ -136,6 +142,30 @@ public class ItemManager {
         }
         
         return basePrice * (1 + enchantBonus);
+    }
+
+    public long getResaleCooldownRemaining(ItemStack item) {
+        if (item == null || !item.hasItemMeta()) return 0;
+        ItemMeta meta = item.getItemMeta();
+        if (!meta.getPersistentDataContainer().has(plugin.getShopBoughtTimeKey(), PersistentDataType.LONG)) return 0;
+
+        long boughtTime = meta.getPersistentDataContainer().get(plugin.getShopBoughtTimeKey(), PersistentDataType.LONG);
+        long cooldownMillis = (long) plugin.getResaleCooldownHours() * 3600000L;
+        long elapsed = System.currentTimeMillis() - boughtTime;
+
+        if (elapsed >= cooldownMillis) {
+            return 0;
+        }
+        return cooldownMillis - elapsed;
+    }
+
+    public void clearCooldown(ItemStack item) {
+        if (item == null || !item.hasItemMeta()) return;
+        ItemMeta meta = item.getItemMeta();
+        if (meta.getPersistentDataContainer().has(plugin.getShopBoughtTimeKey(), PersistentDataType.LONG)) {
+            meta.getPersistentDataContainer().remove(plugin.getShopBoughtTimeKey());
+            item.setItemMeta(meta);
+        }
     }
 
     public ShopItem getShopItem(Material material) {

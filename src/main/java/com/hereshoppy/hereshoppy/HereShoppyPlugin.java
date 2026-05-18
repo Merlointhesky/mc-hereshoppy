@@ -5,6 +5,7 @@ import com.hereshoppy.hereshoppy.config.DataManager;
 import com.hereshoppy.hereshoppy.listener.ShopListener;
 import com.hereshoppy.hereshoppy.listener.ShippingBinListener;
 import com.hereshoppy.hereshoppy.shop.ItemManager;
+import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class HereShoppyPlugin extends JavaPlugin {
@@ -12,10 +13,13 @@ public class HereShoppyPlugin extends JavaPlugin {
     private static HereShoppyPlugin instance;
     private DataManager dataManager;
     private ItemManager itemManager;
+    private NamespacedKey shopBoughtTimeKey;
 
     @Override
     public void onEnable() {
         instance = this;
+        saveDefaultConfig();
+        this.shopBoughtTimeKey = new NamespacedKey(this, "shop_bought_time");
         this.dataManager = new DataManager(this);
         this.itemManager = new ItemManager(this);
 
@@ -27,6 +31,16 @@ public class HereShoppyPlugin extends JavaPlugin {
         // Register Listeners
         getServer().getPluginManager().registerEvents(new ShippingBinListener(this), this);
         getServer().getPluginManager().registerEvents(new ShopListener(), this);
+        getServer().getPluginManager().registerEvents(new com.hereshoppy.hereshoppy.listener.PlayerDataListener(this), this);
+        
+        // Start Auto-save task (every 5 minutes)
+        getServer().getScheduler().runTaskTimer(this, () -> {
+            if (dataManager != null) {
+                dataManager.savePlayers();
+                dataManager.saveBins();
+                getLogger().info("Auto-saved player data and bins.");
+            }
+        }, 6000L, 6000L); // 20 ticks * 60 seconds * 5 minutes = 6000 ticks
 
         getLogger().info("HereShoppy has been enabled!");
     }
@@ -49,5 +63,13 @@ public class HereShoppyPlugin extends JavaPlugin {
 
     public ItemManager getItemManager() {
         return itemManager;
+    }
+
+    public NamespacedKey getShopBoughtTimeKey() {
+        return shopBoughtTimeKey;
+    }
+
+    public int getResaleCooldownHours() {
+        return getConfig().getInt("resale-cooldown-hours", 24);
     }
 }

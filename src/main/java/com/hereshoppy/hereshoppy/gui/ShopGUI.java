@@ -202,22 +202,36 @@ public class ShopGUI {
 
     private static void addRandomEnchantments(ItemStack item, int level) {
         ItemMeta meta = item.getItemMeta();
+        if (meta == null) return; // Safety check in case the item doesn't support metadata
+        
         Random random = new Random();
         
-        // Only enchant if it's enchantable
+        // Filter out items it can't enchant AND curses
         List<Enchantment> possible = Arrays.stream(Enchantment.values())
                 .filter(e -> e.canEnchantItem(item))
+                .filter(e -> !e.isCursed()) // This filters out the curses
                 .collect(Collectors.toList());
         
         if (possible.isEmpty()) return;
         
         int numEnchants = random.nextInt(Math.min(3, level / 20 + 1)) + 1;
+        
         for (int i = 0; i < numEnchants; i++) {
-            Enchantment ench = possible.get(random.nextInt(possible.size()));
+            // Break out of the loop if we run out of possible enchantments
+            if (possible.isEmpty()) break; 
+            
+            int randomIndex = random.nextInt(possible.size());
+            Enchantment ench = possible.get(randomIndex);
+            
             int max = Math.min(ench.getMaxLevel(), level / 20 + 1);
-            int enchLevel = random.nextInt(max) + 1;
+            int enchLevel = random.nextInt(Math.max(1, max)) + 1; // Ensure bound is positive
+            
             meta.addEnchant(ench, enchLevel, true);
+            
+            // Remove the applied enchantment so the loop doesn't select it again
+            possible.remove(randomIndex);
         }
+        
         item.setItemMeta(meta);
     }
 

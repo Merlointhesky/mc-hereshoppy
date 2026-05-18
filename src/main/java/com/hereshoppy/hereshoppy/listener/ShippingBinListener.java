@@ -27,6 +27,7 @@ public class ShippingBinListener implements Listener {
 
     private final HereShoppyPlugin plugin;
     private final Map<UUID, Inventory> activeBins = new HashMap<>();
+    private final Map<org.bukkit.Location, Long> lastWarningTime = new HashMap<>();
 
     public ShippingBinListener(HereShoppyPlugin plugin) {
         this.plugin = plugin;
@@ -38,15 +39,17 @@ public class ShippingBinListener implements Listener {
             for (Map.Entry<org.bukkit.Location, UUID> entry : plugin.getDataManager().getPhysicalBins().entrySet()) {
                 Block block = entry.getKey().getBlock();
                 if (block.getState() instanceof Container container) {
-                    processInventory(container.getInventory(), entry.getValue());
+                    processInventory(container.getInventory(), entry.getValue(), entry.getKey());
                 }
             }
         }, 100L, 100L); // Every 5 seconds
     }
 
-    private void processInventory(Inventory inv, UUID owner) {
+    private void processInventory(Inventory inv, UUID owner, org.bukkit.Location loc) {
         double totalEarned = 0;
         int itemsSold = 0;
+        long longestCooldown = 0;
+
         for (int i = 0; i < inv.getSize(); i++) {
             ItemStack item = inv.getItem(i);
             if (item != null && item.getType() != Material.AIR) {
@@ -54,7 +57,12 @@ public class ShippingBinListener implements Listener {
                 if (price > 0) {
                     totalEarned += price;
                     itemsSold += item.getAmount();
+                    // Clear cooldown if it passed (though calculateSellPrice returns > 0 only if passed or never had one)
+                    plugin.getItemManager().clearCooldown(item);
                     inv.setItem(i, null);
+                } else if (price == -1) {
+                    long remaining = plugin.getItemManager().getResaleCooldownRemaining(item);
+                    if (remaining > longestCooldown) longestCooldown = remaining;
                 }
             }
         }
@@ -63,6 +71,25 @@ public class ShippingBinListener implements Listener {
             Player player = Bukkit.getPlayer(owner);
             if (player != null && player.isOnline()) {
                 player.sendMessage("§a§l[Here Sell!] §7Receipt: Sold §e" + itemsSold + " §7items for §e" + String.format("%.2f", totalEarned) + " §7Kroins!");
+            }
+        }
+        if (longestCooldown > 0) {
+            boolean shouldWarn = true;
+            if (loc != null) {
+                long now = System.currentTimeMillis();
+                long lastWarn = lastWarningTime.getOrDefault(loc, 0L);
+                if (now - lastWarn < 600000) { // 10 minutes cooldown for physical bins
+                    shouldWarn = false;
+                } else {
+                    lastWarningTime.put(loc, now);
+                }
+            }
+
+            if (shouldWarn) {
+                Player player = Bukkit.getPlayer(owner);
+                if (player != null && player.isOnline()) {
+                    player.sendMessage("§c§l[Here Sell!] §7Some items were not sold because they are under a 24-hour shop resale cooldown (" + formatTime(longestCooldown) + " remaining).");
+                }
             }
         }
     }
@@ -86,11 +113,13 @@ public class ShippingBinListener implements Listener {
             Block attachedTo = getAttachedBlock(block);
             if (attachedTo != null && plugin.getDataManager().getPhysicalBins().containsKey(attachedTo.getLocation())) {
                 plugin.getDataManager().removePhysicalBin(attachedTo.getLocation());
+                lastWarningTime.remove(attachedTo.getLocation());
                 event.getPlayer().sendMessage("§c§l[Here Sell!] §7Physical shipping bin removed.");
             }
         } else if (block.getState() instanceof Container) {
             if (plugin.getDataManager().getPhysicalBins().containsKey(block.getLocation())) {
                 plugin.getDataManager().removePhysicalBin(block.getLocation());
+                lastWarningTime.remove(block.getLocation());
                 event.getPlayer().sendMessage("§c§l[Here Sell!] §7Physical shipping bin removed.");
             }
         }
@@ -130,6 +159,8 @@ public class ShippingBinListener implements Listener {
         if (activeBins.containsKey(player.getUniqueId()) && activeBins.get(player.getUniqueId()).equals(inv)) {
             double totalEarned = 0;
             int itemsSold = 0;
+            long longestCooldown = 0;
+
             for (int i = 0; i < inv.getSize(); i++) {
                 ItemStack item = inv.getItem(i);
                 if (item != null && item.getType() != Material.AIR) {
@@ -137,7 +168,11 @@ public class ShippingBinListener implements Listener {
                     if (price > 0) {
                         totalEarned += price;
                         itemsSold += item.getAmount();
+                        plugin.getItemManager().clearCooldown(item);
                         inv.setItem(i, null);
+                    } else if (price == -1) {
+                        long remaining = plugin.getItemManager().getResaleCooldownRemaining(item);
+                        if (remaining > longestCooldown) longestCooldown = remaining;
                     }
                 }
             }
@@ -145,6 +180,10 @@ public class ShippingBinListener implements Listener {
             if (totalEarned > 0) {
                 HereshoppyAPI.addKroins(player.getUniqueId(), totalEarned);
                 player.sendMessage("§a§l[Here Sell!] §7Receipt: Sold §e" + itemsSold + " §7items for §e" + String.format("%.2f", totalEarned) + " §7Kroins!");
+            }
+
+            if (longestCooldown > 0) {
+                player.sendMessage("§c§l[Here Sell!] §7Some items were not sold because they are under a 24-hour shop resale cooldown (" + formatTime(longestCooldown) + " remaining).");
             }
 
             // Return remaining items
@@ -158,6 +197,17 @@ public class ShippingBinListener implements Listener {
             }
             
             activeBins.remove(player.getUniqueId());
+        }
+    }
+
+    private String formatTime(long millis) {
+        long seconds = millis / 1000;
+        long hours = seconds / 3600;
+        long minutes = (seconds % 3600) / 60;
+        if (hours > 0) {
+            return String.format("%dh %dm", hours, minutes);
+        } else {
+            return String.format("%dm", minutes);
         }
     }
 }
