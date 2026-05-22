@@ -32,6 +32,15 @@ public class HereShoppyCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
+        if (command.getName().equalsIgnoreCase("shop")) {
+            if (!player.hasPermission("hereshoppy.use")) {
+                player.sendMessage("§cYou don't have permission.");
+                return true;
+            }
+            ShopGUI.openMainMenu(player);
+            return true;
+        }
+
         if (args.length == 0) {
             return false;
         }
@@ -93,6 +102,9 @@ public class HereShoppyCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if (command.getName().equalsIgnoreCase("shop")) {
+            return Collections.emptyList();
+        }
         if (args.length == 1) {
             List<String> options = new ArrayList<>();
             options.add("shop");

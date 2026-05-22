@@ -43,17 +43,23 @@ misc:
     required_shop_level: 0
   firework_rocket:
     material: FIREWORK_ROCKET
-    required_shop_level: 80
+    required_shop_level: 90
   firework_star:
     material: FIREWORK_STAR
-    required_shop_level: 80
+    required_shop_level: 60
+  experience_bottle:
+    material: EXPERIENCE_BOTTLE
+    required_shop_level: 50
+  dragon_breath:
+    material: DRAGON_BREATH
+    required_shop_level: 95
 storage:
   shulker_box:
     material: SHULKER_BOX
     required_shop_level: 100
   ender_chest:
     material: ENDER_CHEST
-    required_shop_level: 80
+    required_shop_level: 90
   bundle:
     material: BUNDLE
     required_shop_level: 40
@@ -78,10 +84,16 @@ decor:
     required_shop_level: 40
   totem_of_undying:
     material: TOTEM_OF_UNDYING
-    required_shop_level: 100
+    required_shop_level: 95
   netherite_upgrade_template:
     material: NETHERITE_UPGRADE_SMITHING_TEMPLATE
-    required_shop_level: 90
+    required_shop_level: 95
   cocoa_beans:
     material: COCOA_BEANS
     required_shop_level: 20
+  trial_key:
+    material: TRIAL_KEY
+    required_shop_level: 60
+  ominous_trial_key:
+    material: OMINOUS_TRIAL_KEY
+    required_shop_level: 80

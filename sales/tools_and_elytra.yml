@@ -13,10 +13,10 @@ pickaxe:
     required_shop_level: 30
   diamond_pickaxe:
     material: DIAMOND_PICKAXE
-    required_shop_level: 70
+    required_shop_level: 80
   netherite_pickaxe:
     material: NETHERITE_PICKAXE
-    required_shop_level: 90
+    required_shop_level: 95
 shovel:
   wooden_shovel:
     material: WOODEN_SHOVEL
@@ -32,10 +32,10 @@ shovel:
     required_shop_level: 30
   diamond_shovel:
     material: DIAMOND_SHOVEL
-    required_shop_level: 70
+    required_shop_level: 80
   netherite_shovel:
     material: NETHERITE_SHOVEL
-    required_shop_level: 90
+    required_shop_level: 95
 hoe:
   wooden_hoe:
     material: WOODEN_HOE
@@ -51,10 +51,10 @@ hoe:
     required_shop_level: 30
   diamond_hoe:
     material: DIAMOND_HOE
-    required_shop_level: 70
+    required_shop_level: 80
   netherite_hoe:
     material: NETHERITE_HOE
-    required_shop_level: 90
+    required_shop_level: 95
 special:
   elytra:
     material: ELYTRA

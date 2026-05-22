@@ -71,6 +71,9 @@ mechanisms:
   jukebox:
     material: JUKEBOX
     required_shop_level: 80
+  crafter:
+    material: CRAFTER
+    required_shop_level: 70
 sensors:
   sculk_sensor:
     material: SCULK_SENSOR

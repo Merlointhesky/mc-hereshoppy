@@ -27,7 +27,7 @@ public class ShopGUI {
         
         Inventory inv = Bukkit.createInventory(new MainMenuHolder(), 27, Component.text("Shop Categories - Level " + data.getShopLevel()));
         
-        Map<String, List<Material>> categories = plugin.getItemManager().getCategories();
+        Map<String, List<String>> categories = plugin.getItemManager().getCategories();
         int slot = 0;
         
         // Add search item at the beginning
@@ -62,38 +62,32 @@ public class ShopGUI {
         PlayerData data = plugin.getDataManager().getPlayerData(player.getUniqueId());
         int currentLevel = data.getShopLevel();
         
-        List<Material> allMaterials = plugin.getItemManager().getCategories().get(category);
-        if (allMaterials == null) return;
+        List<String> allKeys = plugin.getItemManager().getCategories().get(category);
+        if (allKeys == null) return;
 
         // Filter available items and preview items
-        List<Material> available = new ArrayList<>();
-        List<Material> preview = new ArrayList<>();
+        List<String> available = new ArrayList<>();
+        List<String> preview = new ArrayList<>();
         
         int nextTierLevel = Integer.MAX_VALUE;
-        for (Material mat : allMaterials) {
-            ItemManager.ShopItem shopItem = plugin.getItemManager().getShopItem(mat);
+        for (String key : allKeys) {
+            ItemManager.ShopItem shopItem = plugin.getItemManager().getShopItem(key);
             if (shopItem == null) continue;
             
             if (shopItem.getRequiredLevel() <= currentLevel) {
-                available.add(mat);
+                available.add(key);
             } else if (shopItem.getRequiredLevel() < nextTierLevel) {
                 nextTierLevel = shopItem.getRequiredLevel();
             }
         }
 
         if (nextTierLevel != Integer.MAX_VALUE) {
-            for (Material mat : allMaterials) {
-                ItemManager.ShopItem shopItem = plugin.getItemManager().getShopItem(mat);
+            for (String key : allKeys) {
+                ItemManager.ShopItem shopItem = plugin.getItemManager().getShopItem(key);
                 if (shopItem != null && shopItem.getRequiredLevel() == nextTierLevel) {
-                    preview.add(mat);
+                    preview.add(key);
                 }
             }
-        }
-
-        // If level >= 100, randomize available items if it's armor/weapons/tools
-        if (currentLevel >= 100 && isRandomizableCategory(category)) {
-            // In a real implementation we might want to store the "current stock" for the player
-            // But for now we'll just show them. The "Randomise" button will refresh this.
         }
 
         Inventory inv = Bukkit.createInventory(new CategoryMenuHolder(category, page), 54, Component.text(formatCategoryName(category)));
@@ -103,8 +97,8 @@ public class ShopGUI {
         
         int start = page * 45;
         for (int i = 0; i < 45 && (start + i) < available.size(); i++) {
-            Material mat = available.get(start + i);
-            inv.setItem(i, createShopItem(player, mat, false));
+            String key = available.get(start + i);
+            inv.setItem(i, createShopItem(player, key, false));
         }
 
         // Bottom row preview
@@ -133,45 +127,229 @@ public class ShopGUI {
         player.openInventory(inv);
     }
 
-    public static void openSearchMenu(Player player, String query) {
+    public static void openSearchMenu(Player player, SearchFilterState state) {
         HereShoppyPlugin plugin = HereShoppyPlugin.getInstance();
         PlayerData data = plugin.getDataManager().getPlayerData(player.getUniqueId());
         int currentLevel = data.getShopLevel();
         
-        List<Material> matches = new ArrayList<>();
-        for (Material mat : Material.values()) {
-            ItemManager.ShopItem shopItem = plugin.getItemManager().getShopItem(mat);
-            if (shopItem == null) continue;
-            
-            if (mat.name().toLowerCase().contains(query.toLowerCase())) {
-                if (shopItem.getRequiredLevel() <= currentLevel) {
-                    matches.add(mat);
+        List<ItemManager.ShopItem> matches = new ArrayList<>();
+        if (state.hasAnyActiveFilter()) {
+            for (ItemManager.ShopItem shopItem : plugin.getItemManager().getAllItems().values()) {
+                // Apply category filter
+                if (state.getCategory() != null) {
+                    String cat = findCategoryForKey(shopItem.getConfigKey());
+                    if (!cat.equalsIgnoreCase(state.getCategory())) continue;
                 }
+
+                // Apply starting letter filter
+                if (state.getLetter() != null) {
+                    String name = formatCategoryItemName(shopItem);
+                    if (name == null || name.isEmpty() || !name.substring(0, 1).equalsIgnoreCase(state.getLetter())) {
+                        continue;
+                    }
+                }
+
+                // Apply level range filter
+                if (!state.getLevelRange().equals("ALL")) {
+                    int req = shopItem.getRequiredLevel();
+                    boolean matchesLevel = switch (state.getLevelRange()) {
+                        case "1-20" -> req >= 1 && req <= 20;
+                        case "21-50" -> req >= 21 && req <= 50;
+                        case "51-80" -> req >= 51 && req <= 80;
+                        case "81-100" -> req >= 81 && req <= 100;
+                        default -> true;
+                    };
+                    if (!matchesLevel) continue;
+                }
+
+                // Apply availability filter
+                if (!state.getAvailability().equals("ALL")) {
+                    boolean canBuy = shopItem.getRequiredLevel() <= currentLevel;
+                    if (state.getAvailability().equals("PURCHASABLE") && !canBuy) continue;
+                    if (state.getAvailability().equals("LOCKED") && canBuy) continue;
+                }
+
+                // Apply text query filter
+                if (state.getQuery() != null) {
+                    String q = state.getQuery().toLowerCase();
+                    String itemKey = shopItem.getConfigKey().toLowerCase();
+                    boolean match = itemKey.contains(q) || 
+                                    shopItem.getMaterial().name().toLowerCase().contains(q);
+                    
+                    if (!match && shopItem.getPotionType() != null) {
+                        match = shopItem.getPotionType().toLowerCase().contains(q);
+                    }
+                    if (!match && shopItem.getEnchantType() != null) {
+                        match = shopItem.getEnchantType().toLowerCase().contains(q);
+                    }
+                    if (!match) continue;
+                }
+
+                matches.add(shopItem);
             }
+
+            // Sort matches: purchasable first, then by required level (ascending), then by config key
+            matches.sort((a, b) -> {
+                boolean aCanBuy = a.getRequiredLevel() <= currentLevel;
+                boolean bCanBuy = b.getRequiredLevel() <= currentLevel;
+                if (aCanBuy != bCanBuy) {
+                    return aCanBuy ? -1 : 1;
+                }
+                int levelComp = Integer.compare(a.getRequiredLevel(), b.getRequiredLevel());
+                if (levelComp != 0) return levelComp;
+                return a.getConfigKey().compareTo(b.getConfigKey());
+            });
         }
 
-        Inventory inv = Bukkit.createInventory(new SearchMenuHolder(query), 54, Component.text("Search: " + query));
+        Inventory inv = Bukkit.createInventory(new SearchMenuHolder(state), 54, Component.text("Shop Search & Filter"));
         
-        for (int i = 0; i < 45 && i < matches.size(); i++) {
-            inv.setItem(i, createShopItem(player, matches.get(i), false));
+        if (!state.hasAnyActiveFilter()) {
+            ItemStack guideBook = new ItemStack(Material.BOOK);
+            ItemMeta guideMeta = guideBook.getItemMeta();
+            if (guideMeta != null) {
+                guideMeta.displayName(Component.text("Shop Search & Filter Dashboard", NamedTextColor.GOLD).decoration(TextDecoration.ITALIC, false));
+                List<Component> guideLore = new ArrayList<>();
+                guideLore.add(Component.text("Select a filter below to search the shop.", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+                guideLore.add(Component.text("Click the controls at the bottom to start!", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
+                guideMeta.lore(guideLore);
+                guideBook.setItemMeta(guideMeta);
+            }
+            inv.setItem(22, guideBook);
+        } else {
+            for (int i = 0; i < 45 && i < matches.size(); i++) {
+                ItemManager.ShopItem shopItem = matches.get(i);
+                inv.setItem(i, createShopItem(player, shopItem.getConfigKey(), shopItem.getRequiredLevel() > currentLevel));
+            }
         }
         
-        inv.setItem(48, createNavItem("Back to Categories", Material.BARRIER));
+        // Slot 45: Name Search (Compass)
+        ItemStack nameSearch = new ItemStack(Material.COMPASS);
+        ItemMeta searchMeta = nameSearch.getItemMeta();
+        if (searchMeta != null) {
+            searchMeta.displayName(Component.text("🔍 Name Search", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
+            List<Component> searchLore = new ArrayList<>();
+            searchLore.add(Component.text("Current: " + (state.getQuery() != null ? state.getQuery() : "None"), NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+            searchLore.add(Component.text("Click to search by word in chat", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
+            searchMeta.lore(searchLore);
+            nameSearch.setItemMeta(searchMeta);
+        }
+        inv.setItem(45, nameSearch);
+
+        // Slot 46: Starting Letter (Paper)
+        ItemStack letterSearch = new ItemStack(Material.PAPER);
+        ItemMeta letterMeta = letterSearch.getItemMeta();
+        if (letterMeta != null) {
+            letterMeta.displayName(Component.text("🔠 Starting Letter Filter", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
+            List<Component> letterLore = new ArrayList<>();
+            letterLore.add(Component.text("Current: " + (state.getLetter() != null ? state.getLetter().toUpperCase() : "None"), NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+            letterLore.add(Component.text("Click to select starting letter", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
+            letterMeta.lore(letterLore);
+            letterSearch.setItemMeta(letterMeta);
+        }
+        inv.setItem(46, letterSearch);
+
+        // Slot 47: Category Filter (Chest)
+        ItemStack catSearch = new ItemStack(Material.CHEST);
+        ItemMeta catMeta = catSearch.getItemMeta();
+        if (catMeta != null) {
+            catMeta.displayName(Component.text("📦 Category Filter", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
+            List<Component> catLore = new ArrayList<>();
+            catLore.add(Component.text("Current: " + (state.getCategory() != null ? formatCategoryName(state.getCategory()) : "All Categories"), NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+            catLore.add(Component.text("Click to cycle categories", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
+            catMeta.lore(catLore);
+            catSearch.setItemMeta(catMeta);
+        }
+        inv.setItem(47, catSearch);
+
+        // Slot 48: Level Filter (Experience Bottle)
+        ItemStack levelSearch = new ItemStack(Material.EXPERIENCE_BOTTLE);
+        ItemMeta levelMeta = levelSearch.getItemMeta();
+        if (levelMeta != null) {
+            levelMeta.displayName(Component.text("🧪 Level Range Filter", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
+            List<Component> levelLore = new ArrayList<>();
+            levelLore.add(Component.text("Current: " + state.getLevelRange(), NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+            levelLore.add(Component.text("Click to cycle level ranges", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
+            levelMeta.lore(levelLore);
+            levelSearch.setItemMeta(levelMeta);
+        }
+        inv.setItem(48, levelSearch);
+
+        // Slot 49: Availability Filter (Lever)
+        ItemStack availSearch = new ItemStack(Material.LEVER);
+        ItemMeta availMeta = availSearch.getItemMeta();
+        if (availMeta != null) {
+            availMeta.displayName(Component.text("⚙️ Availability Filter", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
+            List<Component> availLore = new ArrayList<>();
+            availLore.add(Component.text("Current: " + state.getAvailability(), NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+            availLore.add(Component.text("Click to cycle availability", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
+            availMeta.lore(availLore);
+            availSearch.setItemMeta(availMeta);
+        }
+        inv.setItem(49, availSearch);
+
+        // Slot 50: Reset Filters (Redstone Dust)
+        ItemStack resetSearch = new ItemStack(Material.REDSTONE);
+        ItemMeta resetMeta = resetSearch.getItemMeta();
+        if (resetMeta != null) {
+            resetMeta.displayName(Component.text("❌ Reset Filters", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
+            List<Component> resetLore = new ArrayList<>();
+            resetLore.add(Component.text("Click to clear all active filters", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+            resetMeta.lore(resetLore);
+            resetSearch.setItemMeta(resetMeta);
+        }
+        inv.setItem(50, resetSearch);
+
+        // Slot 53: Go Back (Barrier)
+        inv.setItem(53, createNavItem("Back to Categories", Material.BARRIER));
+
         player.openInventory(inv);
     }
 
-    private static ItemStack createShopItem(Player player, Material material, boolean isPreview) {
-        HereShoppyPlugin plugin = HereShoppyPlugin.getInstance();
-        ItemManager.ShopItem shopItem = plugin.getItemManager().getShopItem(material);
-        PlayerData data = plugin.getDataManager().getPlayerData(player.getUniqueId());
+    public static void openAlphabetMenu(Player player, SearchFilterState state) {
+        Inventory inv = Bukkit.createInventory(new AlphabetMenuHolder(state), 27, Component.text("Select Starting Letter"));
         
-        ItemStack item = new ItemStack(material);
-        if (material.getMaxStackSize() > 1) {
-            item.setAmount(material.getMaxStackSize());
+        char letter = 'A';
+        for (int i = 0; i < 26; i++) {
+            ItemStack paper = new ItemStack(Material.PAPER);
+            ItemMeta meta = paper.getItemMeta();
+            if (meta != null) {
+                meta.displayName(Component.text("Letter: " + letter, NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
+                paper.setItemMeta(meta);
+            }
+            inv.setItem(i, paper);
+            letter++;
         }
         
+        ItemStack clear = new ItemStack(Material.BARRIER);
+        ItemMeta clearMeta = clear.getItemMeta();
+        if (clearMeta != null) {
+            clearMeta.displayName(Component.text("Clear Starting Letter Filter", NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
+            clear.setItemMeta(clearMeta);
+        }
+        inv.setItem(26, clear);
+        
+        player.openInventory(inv);
+    }
+
+    private static String formatCategoryItemName(ItemManager.ShopItem shopItem) {
+        String key = shopItem.getConfigKey();
+        if (key.contains(".")) {
+            String[] parts = key.split("\\.");
+            key = parts[parts.length - 1];
+        }
+        return key.replaceAll("_", " ");
+    }
+
+    private static ItemStack createShopItem(Player player, String itemKey, boolean isPreview) {
+        HereShoppyPlugin plugin = HereShoppyPlugin.getInstance();
+        ItemManager.ShopItem shopItem = plugin.getItemManager().getShopItem(itemKey);
+        if (shopItem == null) return new ItemStack(Material.BARRIER);
+        PlayerData data = plugin.getDataManager().getPlayerData(player.getUniqueId());
+        
+        ItemStack item = shopItem.createItemStack(plugin);
+        
         // Add random enchants if it's a randomizable category
-        if (!isPreview && isRandomizableCategory(findCategoryForMaterial(material))) {
+        if (!isPreview && isRandomizableCategory(findCategoryForKey(itemKey))) {
             addRandomEnchantments(item, data.getShopLevel());
         }
         
@@ -181,7 +359,7 @@ public class ShopGUI {
         if (isPreview) {
             lore.add(Component.text("LOCKED - Available at level " + shopItem.getRequiredLevel(), NamedTextColor.RED).decoration(TextDecoration.ITALIC, false));
         } else {
-            double price = plugin.getItemManager().calculateBuyPrice(item);
+            double price = plugin.getItemManager().calculateBuyPrice(itemKey, item);
             lore.add(Component.text("Price: ", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)
                     .append(Component.text(String.format("%.2f", price) + " Kroins", NamedTextColor.YELLOW)));
             lore.add(Component.text("Click to purchase stack", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
@@ -192,10 +370,9 @@ public class ShopGUI {
         return item;
     }
 
-    private static String findCategoryForMaterial(Material material) {
-        HereShoppyPlugin plugin = HereShoppyPlugin.getInstance();
-        for (Map.Entry<String, List<Material>> entry : plugin.getItemManager().getCategories().entrySet()) {
-            if (entry.getValue().contains(material)) return entry.getKey();
+    private static String findCategoryForKey(String itemKey) {
+        if (itemKey != null && itemKey.contains(".")) {
+            return itemKey.split("\\.")[0];
         }
         return "other";
     }
@@ -261,6 +438,7 @@ public class ShopGUI {
             case "ores_and_minerals" -> Material.DIAMOND;
             case "seeds_and_saplings" -> Material.OAK_SAPLING;
             case "potions" -> Material.POTION;
+            case "enchants" -> Material.ENCHANTED_BOOK;
             case "building_blocks" -> Material.BRICKS;
             case "redstone" -> Material.REDSTONE;
             case "mob_drops" -> Material.ROTTEN_FLESH;
@@ -285,10 +463,52 @@ public class ShopGUI {
         @Override public @NotNull Inventory getInventory() { return null; }
     }
 
-    public static class SearchMenuHolder implements InventoryHolder {
-        private final String query;
-        public SearchMenuHolder(String query) { this.query = query; }
+    public static class SearchFilterState {
+        private String query = null;
+        private String letter = null;
+        private String category = null;
+        private String levelRange = "ALL";
+        private String availability = "ALL";
+
         public String getQuery() { return query; }
+        public void setQuery(String query) { this.query = query; }
+
+        public String getLetter() { return letter; }
+        public void setLetter(String letter) { this.letter = letter; }
+
+        public String getCategory() { return category; }
+        public void setCategory(String category) { this.category = category; }
+
+        public String getLevelRange() { return levelRange; }
+        public void setLevelRange(String levelRange) { this.levelRange = levelRange; }
+
+        public String getAvailability() { return availability; }
+        public void setAvailability(String availability) { this.availability = availability; }
+
+        public boolean hasAnyActiveFilter() {
+            return query != null || letter != null || category != null || !levelRange.equals("ALL") || !availability.equals("ALL");
+        }
+
+        public void reset() {
+            query = null;
+            letter = null;
+            category = null;
+            levelRange = "ALL";
+            availability = "ALL";
+        }
+    }
+
+    public static class SearchMenuHolder implements InventoryHolder {
+        private final SearchFilterState state;
+        public SearchMenuHolder(SearchFilterState state) { this.state = state; }
+        public SearchFilterState getState() { return state; }
+        @Override public @NotNull Inventory getInventory() { return null; }
+    }
+
+    public static class AlphabetMenuHolder implements InventoryHolder {
+        private final SearchFilterState state;
+        public AlphabetMenuHolder(SearchFilterState state) { this.state = state; }
+        public SearchFilterState getState() { return state; }
         @Override public @NotNull Inventory getInventory() { return null; }
     }
 }

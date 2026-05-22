@@ -13,10 +13,10 @@ seeds:
     required_shop_level: 30
   torchflower_seeds:
     material: TORCHFLOWER_SEEDS
-    required_shop_level: 20
+    required_shop_level: 40
   pitcher_pod:
     material: PITCHER_POD
-    required_shop_level: 20
+    required_shop_level: 40
 saplings:
   oak_sapling:
     material: OAK_SAPLING
@@ -41,14 +41,23 @@ saplings:
     required_shop_level: 15
   cherry_sapling:
     material: CHERRY_SAPLING
-    required_shop_level: 15
+    required_shop_level: 55
   pale_oak_sapling:
     material: PALE_OAK_SAPLING
-    required_shop_level: 15
+    required_shop_level: 75
+  azalea:
+    material: AZALEA
+    required_shop_level: 20
+  flowering_azalea:
+    material: FLOWERING_AZALEA
+    required_shop_level: 30
 flowers:
   dandelion:
     material: DANDELION
     required_shop_level: 0
+  golden_dandelion:
+    material: GOLDEN_DANDELION
+    required_shop_level: 60
   poppy:
     material: POPPY
     required_shop_level: 0
@@ -76,3 +85,31 @@ flowers:
   peony:
     material: PEONY
     required_shop_level: 10
+  torchflower:
+    material: TORCHFLOWER
+    required_shop_level: 45
+  pitcher_plant:
+    material: PITCHER_PLANT
+    required_shop_level: 45
+  pink_petals:
+    material: PINK_PETALS
+    required_shop_level: 50
+  spore_blossom:
+    material: SPORE_BLOSSOM
+    required_shop_level: 60
+  wither_rose:
+    material: WITHER_ROSE
+    required_shop_level: 85
+misc:
+  moss_block:
+    material: MOSS_BLOCK
+    required_shop_level: 15
+  moss_carpet:
+    material: MOSS_CARPET
+    required_shop_level: 10
+  big_dripleaf:
+    material: BIG_DRIPLEAF
+    required_shop_level: 20
+  small_dripleaf:
+    material: SMALL_DRIPLEAF
+    required_shop_level: 20

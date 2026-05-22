@@ -61,3 +61,15 @@ misc:
   milk_bucket:
     material: MILK_BUCKET
     required_shop_level: 10
+  sniffer_egg:
+    material: SNIFFER_EGG
+    required_shop_level: 100
+  armadillo_scute:
+    material: ARMADILLO_SCUTE
+    required_shop_level: 30
+  turtle_egg:
+    material: TURTLE_EGG
+    required_shop_level: 40
+  turtle_scute:
+    material: TURTLE_SCUTE
+    required_shop_level: 50

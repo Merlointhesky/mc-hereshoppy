@@ -14,12 +14,14 @@ public class HereShoppyPlugin extends JavaPlugin {
     private DataManager dataManager;
     private ItemManager itemManager;
     private NamespacedKey shopBoughtTimeKey;
+    private NamespacedKey shopItemKey;
 
     @Override
     public void onEnable() {
         instance = this;
         saveDefaultConfig();
         this.shopBoughtTimeKey = new NamespacedKey(this, "shop_bought_time");
+        this.shopItemKey = new NamespacedKey(this, "shop_item_key");
         this.dataManager = new DataManager(this);
         this.itemManager = new ItemManager(this);
 
@@ -27,6 +29,10 @@ public class HereShoppyPlugin extends JavaPlugin {
         HereShoppyCommand cmd = new HereShoppyCommand(this);
         getCommand("hereshoppy").setExecutor(cmd);
         getCommand("hereshoppy").setTabCompleter(cmd);
+        if (getCommand("shop") != null) {
+            getCommand("shop").setExecutor(cmd);
+            getCommand("shop").setTabCompleter(cmd);
+        }
 
         // Register Listeners
         getServer().getPluginManager().registerEvents(new ShippingBinListener(this), this);
@@ -67,6 +73,10 @@ public class HereShoppyPlugin extends JavaPlugin {
 
     public NamespacedKey getShopBoughtTimeKey() {
         return shopBoughtTimeKey;
+    }
+
+    public NamespacedKey getShopItemKey() {
+        return shopItemKey;
     }
 
     public int getResaleCooldownHours() {

@@ -29,6 +29,12 @@ stone:
   cobbled_deepslate:
     material: COBBLED_DEEPSLATE
     required_shop_level: 20
+  tuff:
+    material: TUFF
+    required_shop_level: 15
+  polished_tuff:
+    material: POLISHED_TUFF
+    required_shop_level: 20
 dirt:
   dirt:
     material: DIRT
@@ -64,7 +70,7 @@ bricks:
     required_shop_level: 10
   nether_bricks:
     material: NETHER_BRICKS
-    required_shop_level: 25
+    required_shop_level: 35
 glass:
   glass:
     material: GLASS
@@ -78,35 +84,38 @@ glass:
 nether:
   netherrack:
     material: NETHERRACK
-    required_shop_level: 15
+    required_shop_level: 25
   soul_sand:
     material: SOUL_SAND
-    required_shop_level: 20
+    required_shop_level: 30
   soul_soil:
     material: SOUL_SOIL
-    required_shop_level: 20
+    required_shop_level: 30
   basalt:
     material: BASALT
-    required_shop_level: 25
+    required_shop_level: 35
   blackstone:
     material: BLACKSTONE
-    required_shop_level: 25
+    required_shop_level: 35
   glowstone:
     material: GLOWSTONE
-    required_shop_level: 30
+    required_shop_level: 40
   obsidian:
     material: OBSIDIAN
     required_shop_level: 80
+  crying_obsidian:
+    material: CRYING_OBSIDIAN
+    required_shop_level: 90
 end:
   end_stone:
     material: END_STONE
-    required_shop_level: 80
+    required_shop_level: 90
   end_stone_bricks:
     material: END_STONE_BRICKS
-    required_shop_level: 45
+    required_shop_level: 95
   purpur_block:
     material: PURPUR_BLOCK
-    required_shop_level: 50
+    required_shop_level: 100
   purpur_pillar:
     material: PURPUR_PILLAR
-    required_shop_level: 50
+    required_shop_level: 100

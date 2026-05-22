@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'com.hereshoppy'
-version = '1.0.0'
+version = '1.2.3'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_21

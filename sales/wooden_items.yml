@@ -22,10 +22,10 @@ logs:
     required_shop_level: 60
   cherry_log:
     material: CHERRY_LOG
-    required_shop_level: 30
+    required_shop_level: 60
   pale_oak_log:
     material: PALE_OAK_LOG
-    required_shop_level: 30
+    required_shop_level: 80
 planks:
   oak_planks:
     material: OAK_PLANKS
@@ -50,10 +50,10 @@ planks:
     required_shop_level: 60
   cherry_planks:
     material: CHERRY_PLANKS
-    required_shop_level: 30
+    required_shop_level: 60
   pale_oak_planks:
     material: PALE_OAK_PLANKS
-    required_shop_level: 30
+    required_shop_level: 80
   bamboo_planks:
     material: BAMBOO_PLANKS
     required_shop_level: 60

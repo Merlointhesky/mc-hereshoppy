@@ -16,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
 
 public class ShopListener implements Listener {
 
-    private final Map<UUID, Boolean> searchExpectant = new HashMap<>();
+    private final Map<UUID, ShopGUI.SearchFilterState> activeChatSearches = new HashMap<>();
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
@@ -40,7 +41,8 @@ public class ShopListener implements Listener {
         // Ensure we are dealing with our shop
         if (!(holder instanceof ShopGUI.MainMenuHolder || 
               holder instanceof ShopGUI.CategoryMenuHolder || 
-              holder instanceof ShopGUI.SearchMenuHolder)) {
+              holder instanceof ShopGUI.SearchMenuHolder ||
+              holder instanceof ShopGUI.AlphabetMenuHolder)) {
             return;
         }
 
@@ -51,10 +53,7 @@ public class ShopListener implements Listener {
         }
 
         // Check if the clicked inventory is the player's inventory
-        // Raw slots for the top inventory are 0 to topInventory.getSize() - 1
         if (event.getRawSlot() >= topInv.getSize() || event.getRawSlot() < 0) {
-            // They clicked outside or in their own inventory
-            // We cancel it to prevent them from shift-clicking or moving items into the shop
             event.setCancelled(true);
             return;
         }
@@ -65,11 +64,85 @@ public class ShopListener implements Listener {
         // All clicks in the shop GUI should be cancelled
         event.setCancelled(true);
 
+        if (holder instanceof ShopGUI.AlphabetMenuHolder alphabetHolder) {
+            event.setCancelled(true);
+            ShopGUI.SearchFilterState state = alphabetHolder.getState();
+            if (event.getRawSlot() < 26) {
+                // Letter slot
+                char letter = (char) ('A' + event.getRawSlot());
+                state.setLetter(String.valueOf(letter));
+                state.setQuery(null); // Clear custom search text when choosing a letter
+                player.closeInventory();
+                Bukkit.getScheduler().runTask(HereShoppyPlugin.getInstance(), () -> ShopGUI.openSearchMenu(player, state));
+            } else if (event.getRawSlot() == 26) {
+                // Clear letter slot
+                state.setLetter(null);
+                player.closeInventory();
+                Bukkit.getScheduler().runTask(HereShoppyPlugin.getInstance(), () -> ShopGUI.openSearchMenu(player, state));
+            }
+            return;
+        }
+
+        if (holder instanceof ShopGUI.SearchMenuHolder searchHolder) {
+            event.setCancelled(true);
+            ShopGUI.SearchFilterState state = searchHolder.getState();
+            int slot = event.getRawSlot();
+            
+            if (slot >= 45 && slot <= 53) {
+                switch (slot) {
+                    case 45 -> {
+                        // Name Search (Compass)
+                        player.closeInventory();
+                        activeChatSearches.put(player.getUniqueId(), state);
+                        player.sendMessage(Component.text("💬 [HereShoppy] Type your search query in chat now (e.g., wind). This message is completely private.", NamedTextColor.YELLOW));
+                    }
+                    case 46 -> {
+                        // Starting Letter (Paper)
+                        player.closeInventory();
+                        Bukkit.getScheduler().runTask(HereShoppyPlugin.getInstance(), () -> ShopGUI.openAlphabetMenu(player, state));
+                    }
+                    case 47 -> {
+                        // Category Filter (Chest)
+                        cycleCategory(state);
+                        player.closeInventory();
+                        Bukkit.getScheduler().runTask(HereShoppyPlugin.getInstance(), () -> ShopGUI.openSearchMenu(player, state));
+                    }
+                    case 48 -> {
+                        // Level Filter (Experience Bottle)
+                        cycleLevelRange(state);
+                        player.closeInventory();
+                        Bukkit.getScheduler().runTask(HereShoppyPlugin.getInstance(), () -> ShopGUI.openSearchMenu(player, state));
+                    }
+                    case 49 -> {
+                        // Availability Filter (Lever)
+                        cycleAvailability(state);
+                        player.closeInventory();
+                        Bukkit.getScheduler().runTask(HereShoppyPlugin.getInstance(), () -> ShopGUI.openSearchMenu(player, state));
+                    }
+                    case 50 -> {
+                        // Reset Filters (Redstone Dust)
+                        state.reset();
+                        player.closeInventory();
+                        Bukkit.getScheduler().runTask(HereShoppyPlugin.getInstance(), () -> ShopGUI.openSearchMenu(player, state));
+                    }
+                    case 53 -> {
+                        // Back to Shop (Barrier)
+                        player.closeInventory();
+                        Bukkit.getScheduler().runTask(HereShoppyPlugin.getInstance(), () -> ShopGUI.openMainMenu(player));
+                    }
+                }
+                return;
+            }
+            
+            if (slot < 45) {
+                purchaseItem(player, clicked);
+            }
+            return;
+        }
+
         if (holder instanceof ShopGUI.MainMenuHolder) {
             if (clicked.getType() == Material.ANVIL) {
-                player.closeInventory();
-                player.sendMessage(Component.text("Please type your search query in chat:", NamedTextColor.YELLOW));
-                searchExpectant.put(player.getUniqueId(), true);
+                ShopGUI.openSearchMenu(player, new ShopGUI.SearchFilterState());
                 return;
             }
             
@@ -82,8 +155,6 @@ public class ShopListener implements Listener {
             }
         } else if (holder instanceof ShopGUI.CategoryMenuHolder catHolder) {
             handleCategoryClick(player, clicked, catHolder, event.getSlot());
-        } else if (holder instanceof ShopGUI.SearchMenuHolder searchHolder) {
-            handleSearchClick(player, clicked, searchHolder, event.getSlot());
         }
     }
 
@@ -93,7 +164,8 @@ public class ShopListener implements Listener {
         InventoryHolder holder = topInv.getHolder();
         if (holder instanceof ShopGUI.MainMenuHolder || 
             holder instanceof ShopGUI.CategoryMenuHolder || 
-            holder instanceof ShopGUI.SearchMenuHolder) {
+            holder instanceof ShopGUI.SearchMenuHolder ||
+            holder instanceof ShopGUI.AlphabetMenuHolder) {
             
             // Cancel any drag that affects the top inventory
             for (int rawSlot : event.getRawSlots()) {
@@ -103,16 +175,12 @@ public class ShopListener implements Listener {
                 }
             }
             
-            // Also just cancel it generally for safety in the shop
             event.setCancelled(true);
         }
     }
 
     private String findCategoryByName(ItemStack item) {
         HereShoppyPlugin plugin = HereShoppyPlugin.getInstance();
-        Map<String, org.bukkit.inventory.ItemStack> categoryIcons = new HashMap<>();
-        // In a real plugin, we'd store the mapping or use PersistentDataContainer
-        // For now, let's compare display names or material
         for (String cat : plugin.getItemManager().getCategories().keySet()) {
             if (getCategoryMaterial(cat) == item.getType()) return cat;
         }
@@ -131,6 +199,7 @@ public class ShopListener implements Listener {
             case "ores_and_minerals" -> Material.DIAMOND;
             case "seeds_and_saplings" -> Material.OAK_SAPLING;
             case "potions" -> Material.POTION;
+            case "enchants" -> Material.ENCHANTED_BOOK;
             case "building_blocks" -> Material.BRICKS;
             case "redstone" -> Material.REDSTONE;
             case "mob_drops" -> Material.ROTTEN_FLESH;
@@ -139,12 +208,10 @@ public class ShopListener implements Listener {
     }
 
     private void handleCategoryClick(Player player, ItemStack clicked, ShopGUI.CategoryMenuHolder holder, int slot) {
-        HereShoppyPlugin plugin = HereShoppyPlugin.getInstance();
-        
         if (slot >= 45) { // Navigation or Preview
             if (clicked.getType() == Material.ARROW) {
                 ItemMeta meta = clicked.getItemMeta();
-                if (meta.displayName() != null) {
+                if (meta != null && meta.displayName() != null) {
                     String name = plainText(meta.displayName());
                     if (name.contains("Next")) {
                         ShopGUI.openCategoryMenu(player, holder.getCategory(), holder.getPage() + 1);
@@ -162,29 +229,25 @@ public class ShopListener implements Listener {
             return;
         }
 
-        // Purchase logic
         purchaseItem(player, clicked);
     }
 
-    private void handleSearchClick(Player player, ItemStack clicked, ShopGUI.SearchMenuHolder holder, int slot) {
-        if (slot == 48 && clicked.getType() == Material.BARRIER) {
-            ShopGUI.openMainMenu(player);
-            return;
-        }
-        if (slot < 45) {
-            purchaseItem(player, clicked);
-        }
-    }
+
 
     private void purchaseItem(Player player, ItemStack clicked) {
         HereShoppyPlugin plugin = HereShoppyPlugin.getInstance();
-        ItemManager.ShopItem shopItem = plugin.getItemManager().getShopItem(clicked.getType());
-        if (shopItem == null) return;
-
-        // Check if the item is actually buyable (has Price lore)
+        
         ItemMeta clickedMeta = clicked.getItemMeta();
         if (clickedMeta == null || clickedMeta.lore() == null) return;
         
+        // Read config key from PDC
+        String itemKey = clickedMeta.getPersistentDataContainer().get(plugin.getShopItemKey(), PersistentDataType.STRING);
+        if (itemKey == null) return;
+        
+        ItemManager.ShopItem shopItem = plugin.getItemManager().getShopItem(itemKey);
+        if (shopItem == null) return;
+
+        // Check if the item is actually buyable (has Price lore)
         boolean isBuyable = false;
         for (Component line : clickedMeta.lore()) {
             if (plainText(line).contains("Price:")) {
@@ -213,7 +276,7 @@ public class ShopListener implements Listener {
             return;
         }
 
-        double price = plugin.getItemManager().calculateBuyPrice(clicked);
+        double price = plugin.getItemManager().calculateBuyPrice(itemKey, clicked);
         double balance = HereshoppyAPI.getKroins(player.getUniqueId());
 
         if (balance < price) {
@@ -239,10 +302,9 @@ public class ShopListener implements Listener {
         
         player.getInventory().addItem(toGive).values().forEach(remaining -> player.getWorld().dropItemNaturally(player.getLocation(), remaining));
         
-        player.sendMessage(Component.text("Purchased " + clicked.getAmount() + "x " + formatMaterialName(clicked.getType()) + " for " + String.format("%.2f", price) + " Kroins.", NamedTextColor.GREEN));
+        String displayName = clickedMeta.hasDisplayName() ? plainText(clickedMeta.displayName()) : formatMaterialName(clicked.getType());
+        player.sendMessage(Component.text("Purchased " + clicked.getAmount() + "x " + displayName + " for " + String.format("%.2f", price) + " Kroins.", NamedTextColor.GREEN));
         player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f);
-        
-        // Refresh GUI to update balance/XP if shown (currently only in title or info)
     }
 
     private String plainText(Component component) {
@@ -258,11 +320,54 @@ public class ShopListener implements Listener {
     @EventHandler
     public void onChat(AsyncChatEvent event) {
         Player player = event.getPlayer();
-        if (searchExpectant.getOrDefault(player.getUniqueId(), false)) {
+        UUID uuid = player.getUniqueId();
+        if (activeChatSearches.containsKey(uuid)) {
             event.setCancelled(true);
-            searchExpectant.remove(player.getUniqueId());
+            ShopGUI.SearchFilterState state = activeChatSearches.remove(uuid);
             String query = plainText(event.message());
-            Bukkit.getScheduler().runTask(HereShoppyPlugin.getInstance(), () -> ShopGUI.openSearchMenu(player, query));
+            state.setQuery(query);
+            state.setLetter(null); // Clear letter filter when searching by custom query
+            Bukkit.getScheduler().runTask(HereShoppyPlugin.getInstance(), () -> ShopGUI.openSearchMenu(player, state));
         }
+    }
+
+    private void cycleCategory(ShopGUI.SearchFilterState state) {
+        HereShoppyPlugin plugin = HereShoppyPlugin.getInstance();
+        List<String> sortedCategories = plugin.getItemManager().getCategories().keySet().stream().sorted().collect(Collectors.toList());
+        if (sortedCategories.isEmpty()) return;
+        
+        String current = state.getCategory();
+        if (current == null) {
+            state.setCategory(sortedCategories.get(0));
+        } else {
+            int index = sortedCategories.indexOf(current);
+            if (index == -1 || index == sortedCategories.size() - 1) {
+                state.setCategory(null); // Cycle back to all
+            } else {
+                state.setCategory(sortedCategories.get(index + 1));
+            }
+        }
+    }
+
+    private void cycleLevelRange(ShopGUI.SearchFilterState state) {
+        String current = state.getLevelRange();
+        String next = switch (current) {
+            case "ALL" -> "1-20";
+            case "1-20" -> "21-50";
+            case "21-50" -> "51-80";
+            case "51-80" -> "81-100";
+            default -> "ALL";
+        };
+        state.setLevelRange(next);
+    }
+
+    private void cycleAvailability(ShopGUI.SearchFilterState state) {
+        String current = state.getAvailability();
+        String next = switch (current) {
+            case "ALL" -> "PURCHASABLE";
+            case "PURCHASABLE" -> "LOCKED";
+            default -> "ALL";
+        };
+        state.setAvailability(next);
     }
 }

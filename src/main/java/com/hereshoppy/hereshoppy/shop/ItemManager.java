@@ -12,11 +12,12 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.io.File;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ItemManager {
     private final HereShoppyPlugin plugin;
-    private final Map<Material, ShopItem> items = new HashMap<>();
-    private final Map<String, List<Material>> categories = new HashMap<>();
+    private final Map<String, ShopItem> items = new HashMap<>();
+    private final Map<String, List<String>> categories = new HashMap<>();
 
     public ItemManager(HereShoppyPlugin plugin) {
         this.plugin = plugin;
@@ -29,15 +30,14 @@ public class ItemManager {
         File salesDir = new File(plugin.getDataFolder(), "sales");
         if (!salesDir.exists()) {
             salesDir.mkdirs();
-            // Create default files if needed, but for now we expect them or will create empty ones
-            createDefaultSalesFiles(salesDir);
         }
+        createDefaultSalesFiles(salesDir);
 
         File[] files = salesDir.listFiles((dir, name) -> name.endsWith(".yml"));
         if (files != null) {
             for (File file : files) {
                 String categoryName = file.getName().replace(".yml", "");
-                List<Material> categoryItems = new ArrayList<>();
+                List<String> categoryItems = new ArrayList<>();
                 FileConfiguration config = YamlConfiguration.loadConfiguration(file);
                 for (String key : config.getKeys(false)) {
                     ConfigurationSection mainSection = config.getConfigurationSection(key);
@@ -62,17 +62,24 @@ public class ItemManager {
         }
     }
 
-    private void loadItem(ConfigurationSection section, String key, List<Material> categoryItems, String fileName) {
+    private void loadItem(ConfigurationSection section, String key, List<String> categoryItems, String fileName) {
         try {
+            String categoryName = fileName.replace(".yml", "");
+            String itemKey = categoryName + "." + key;
+
             Material material = Material.valueOf(section.getString("material", key).toUpperCase());
             int requiredLevel = section.getInt("required_shop_level", 0);
             
             // Calculate buy price: Level 0 -> 1, Level N -> N
             double buyPrice = (requiredLevel == 0) ? 1 : requiredLevel;
             
-            ShopItem item = new ShopItem(material, buyPrice, requiredLevel);
-            items.put(material, item);
-            categoryItems.add(material);
+            String potionType = section.getString("potion_type");
+            String enchantType = section.getString("enchant_type");
+            int enchantLevel = section.getInt("enchant_level", 1);
+
+            ShopItem item = new ShopItem(itemKey, material, buyPrice, requiredLevel, potionType, enchantType, enchantLevel);
+            items.put(itemKey, item);
+            categoryItems.add(itemKey);
         } catch (IllegalArgumentException e) {
             plugin.getLogger().warning("Invalid material in " + fileName + ": " + key);
         }
@@ -84,7 +91,7 @@ public class ItemManager {
             "fruit_and_veg.yml", "meat_and_fish.yml", "wooden_items.yml",
             "metal_items.yml", "ores_and_minerals.yml", "seeds_and_saplings.yml",
             "potions.yml", "building_blocks.yml", "redstone.yml",
-            "mob_drops.yml", "other_items.yml"
+            "mob_drops.yml", "other_items.yml", "enchants.yml"
         };
         for (String fileName : defaultFiles) {
             File file = new File(salesDir, fileName);
@@ -99,12 +106,46 @@ public class ItemManager {
                         ex.printStackTrace();
                     }
                 }
+            } else {
+                // Safely merge any missing default items from the jar into the existing config
+                mergeMissingDefaults(file, "sales/" + fileName);
             }
         }
     }
 
-    public double calculateBuyPrice(ItemStack itemStack) {
-        ShopItem shopItem = items.get(itemStack.getType());
+    private void mergeMissingDefaults(File localFile, String resourcePath) {
+        try {
+            YamlConfiguration localConfig = YamlConfiguration.loadConfiguration(localFile);
+            
+            // Load the default resource stream from the jar
+            java.io.InputStream resourceStream = plugin.getResource(resourcePath);
+            if (resourceStream == null) return;
+            
+            YamlConfiguration jarConfig = YamlConfiguration.loadConfiguration(
+                new java.io.InputStreamReader(resourceStream, java.nio.charset.StandardCharsets.UTF_8)
+            );
+            
+            boolean modified = false;
+            // Iterate over all keys (recursively) in the packaged jar resource file
+            for (String key : jarConfig.getKeys(true)) {
+                if (!localConfig.contains(key)) {
+                    // Copy the missing item (and its sub-keys if it's a section)
+                    localConfig.set(key, jarConfig.get(key));
+                    modified = true;
+                }
+            }
+            
+            if (modified) {
+                localConfig.save(localFile);
+                plugin.getLogger().info("Successfully merged new default items into " + localFile.getName() + " without altering existing entries.");
+            }
+        } catch (Exception e) {
+            plugin.getLogger().severe("Failed to safely merge defaults for " + localFile.getName() + ": " + e.getMessage());
+        }
+    }
+
+    public double calculateBuyPrice(String itemKey, ItemStack itemStack) {
+        ShopItem shopItem = items.get(itemKey);
         if (shopItem == null) return -1;
 
         double basePrice = shopItem.getBuyPrice();
@@ -118,6 +159,21 @@ public class ItemManager {
         }
         
         return basePrice * (1 + enchantBonus);
+    }
+
+    public double calculateBuyPrice(ItemStack itemStack) {
+        if (itemStack.hasItemMeta()) {
+            String itemKey = itemStack.getItemMeta().getPersistentDataContainer().get(plugin.getShopItemKey(), PersistentDataType.STRING);
+            if (itemKey != null) {
+                return calculateBuyPrice(itemKey, itemStack);
+            }
+        }
+        for (ShopItem item : items.values()) {
+            if (item.getMaterial() == itemStack.getType()) {
+                return calculateBuyPrice(item.getConfigKey(), itemStack);
+            }
+        }
+        return -1;
     }
 
     public double calculateSellPrice(ItemStack itemStack) {
@@ -168,23 +224,40 @@ public class ItemManager {
         }
     }
 
-    public ShopItem getShopItem(Material material) {
-        return items.get(material);
+    public ShopItem getShopItem(String itemKey) {
+        return items.get(itemKey);
     }
 
-    public Map<String, List<Material>> getCategories() {
+    public Map<String, List<String>> getCategories() {
         return categories;
     }
 
+    public Map<String, ShopItem> getAllItems() {
+        return items;
+    }
+
     public static class ShopItem {
+        private final String configKey;
         private final Material material;
         private final double buyPrice;
         private final int requiredLevel;
+        private final String potionType;
+        private final String enchantType;
+        private final int enchantLevel;
 
-        public ShopItem(Material material, double buyPrice, int requiredLevel) {
+        public ShopItem(String configKey, Material material, double buyPrice, int requiredLevel,
+                        String potionType, String enchantType, int enchantLevel) {
+            this.configKey = configKey;
             this.material = material;
             this.buyPrice = buyPrice;
             this.requiredLevel = requiredLevel;
+            this.potionType = potionType;
+            this.enchantType = enchantType;
+            this.enchantLevel = enchantLevel;
+        }
+
+        public String getConfigKey() {
+            return configKey;
         }
 
         public Material getMaterial() {
@@ -197,6 +270,108 @@ public class ItemManager {
 
         public int getRequiredLevel() {
             return requiredLevel;
+        }
+
+        public String getPotionType() {
+            return potionType;
+        }
+
+        public String getEnchantType() {
+            return enchantType;
+        }
+
+        public int getEnchantLevel() {
+            return enchantLevel;
+        }
+
+        public ItemStack createItemStack(HereShoppyPlugin plugin) {
+            ItemStack item = new ItemStack(material);
+            if (material.getMaxStackSize() > 1) {
+                item.setAmount(material.getMaxStackSize());
+            }
+
+            ItemMeta meta = item.getItemMeta();
+            if (meta != null) {
+                // Write unique configKey to PDC
+                meta.getPersistentDataContainer().set(plugin.getShopItemKey(), PersistentDataType.STRING, configKey);
+
+                // Apply Potion Meta if it's a potion
+                if (potionType != null && meta instanceof org.bukkit.inventory.meta.PotionMeta potionMeta) {
+                    try {
+                        org.bukkit.potion.PotionType type = org.bukkit.potion.PotionType.valueOf(potionType.toUpperCase());
+                        potionMeta.setBasePotionType(type);
+                    } catch (IllegalArgumentException e) {
+                        plugin.getLogger().warning("Invalid potion type: " + potionType + " for item " + configKey);
+                    }
+                    
+                    // Premium custom display name
+                    potionMeta.displayName(net.kyori.adventure.text.Component.text(formatPotionName(potionType, material), net.kyori.adventure.text.format.NamedTextColor.AQUA).decoration(net.kyori.adventure.text.format.TextDecoration.ITALIC, false));
+                }
+
+                // Apply Enchantment Storage Meta if it's an enchanted book
+                if (enchantType != null && meta instanceof org.bukkit.inventory.meta.EnchantmentStorageMeta storageMeta) {
+                    try {
+                        org.bukkit.enchantments.Enchantment enchantment = org.bukkit.Registry.ENCHANTMENT.get(org.bukkit.NamespacedKey.minecraft(enchantType.toLowerCase()));
+                        if (enchantment == null) {
+                            enchantment = org.bukkit.enchantments.Enchantment.getByKey(org.bukkit.NamespacedKey.minecraft(enchantType.toLowerCase()));
+                        }
+                        if (enchantment != null) {
+                            storageMeta.addStoredEnchant(enchantment, enchantLevel, true);
+                        } else {
+                            plugin.getLogger().warning("Could not find enchantment: " + enchantType);
+                        }
+                    } catch (Exception e) {
+                        plugin.getLogger().warning("Error applying enchantment " + enchantType + ": " + e.getMessage());
+                    }
+
+                    // Premium custom display name with Roman numerals
+                    storageMeta.displayName(net.kyori.adventure.text.Component.text("Enchanted Book (" + formatEnchantName(enchantType) + " " + toRoman(enchantLevel) + ")", net.kyori.adventure.text.format.NamedTextColor.YELLOW).decoration(net.kyori.adventure.text.format.TextDecoration.ITALIC, false));
+                }
+
+                item.setItemMeta(meta);
+            }
+            return item;
+        }
+
+        private String toRoman(int number) {
+            return switch (number) {
+                case 1 -> "I";
+                case 2 -> "II";
+                case 3 -> "III";
+                case 4 -> "IV";
+                case 5 -> "V";
+                default -> String.valueOf(number);
+            };
+        }
+
+        private String formatEnchantName(String key) {
+            if (key == null) return "";
+            return Arrays.stream(key.split("_"))
+                    .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase())
+                    .collect(Collectors.joining(" "));
+        }
+
+        private String formatPotionName(String type, Material mat) {
+            if (type == null) return "Potion";
+            String prefix = "";
+            if (mat == Material.SPLASH_POTION) prefix = "Splash ";
+            else if (mat == Material.LINGERING_POTION) prefix = "Lingering ";
+            
+            String cleanType = type.toLowerCase();
+            boolean isLong = cleanType.startsWith("long_");
+            boolean isStrong = cleanType.startsWith("strong_");
+            if (isLong) cleanType = cleanType.substring(5);
+            if (isStrong) cleanType = cleanType.substring(7);
+            
+            String effectName = Arrays.stream(cleanType.split("_"))
+                    .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase())
+                    .collect(Collectors.joining(" "));
+            
+            String suffix = "";
+            if (isLong) suffix = " (Extended)";
+            if (isStrong) suffix = " II";
+            
+            return prefix + "Potion of " + effectName + suffix;
         }
     }
 }

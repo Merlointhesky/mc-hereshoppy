@@ -13,10 +13,10 @@ helmet:
     required_shop_level: 30
   diamond_helmet:
     material: DIAMOND_HELMET
-    required_shop_level: 70
+    required_shop_level: 80
   netherite_helmet:
     material: NETHERITE_HELMET
-    required_shop_level: 90
+    required_shop_level: 95
 chestplate:
   leather_chestplate:
     material: LEATHER_CHESTPLATE
@@ -32,10 +32,10 @@ chestplate:
     required_shop_level: 30
   diamond_chestplate:
     material: DIAMOND_CHESTPLATE
-    required_shop_level: 70
+    required_shop_level: 80
   netherite_chestplate:
     material: NETHERITE_CHESTPLATE
-    required_shop_level: 90
+    required_shop_level: 95
 leggings:
   leather_leggings:
     material: LEATHER_LEGGINGS
@@ -51,10 +51,10 @@ leggings:
     required_shop_level: 30
   diamond_leggings:
     material: DIAMOND_LEGGINGS
-    required_shop_level: 70
+    required_shop_level: 80
   netherite_leggings:
     material: NETHERITE_LEGGINGS
-    required_shop_level: 90
+    required_shop_level: 95
 boots:
   leather_boots:
     material: LEATHER_BOOTS
@@ -70,10 +70,10 @@ boots:
     required_shop_level: 30
   diamond_boots:
     material: DIAMOND_BOOTS
-    required_shop_level: 70
+    required_shop_level: 80
   netherite_boots:
     material: NETHERITE_BOOTS
-    required_shop_level: 90
+    required_shop_level: 95
 wolf_armor:
   wolf_armor:
     material: WOLF_ARMOR

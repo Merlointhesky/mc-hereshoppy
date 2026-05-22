@@ -13,10 +13,10 @@ sword:
     required_shop_level: 30
   diamond_sword:
     material: DIAMOND_SWORD
-    required_shop_level: 70
+    required_shop_level: 80
   netherite_sword:
     material: NETHERITE_SWORD
-    required_shop_level: 90
+    required_shop_level: 95
 axe:
   wooden_axe:
     material: WOODEN_AXE
@@ -32,10 +32,10 @@ axe:
     required_shop_level: 30
   diamond_axe:
     material: DIAMOND_AXE
-    required_shop_level: 70
+    required_shop_level: 80
   netherite_axe:
     material: NETHERITE_AXE
-    required_shop_level: 90
+    required_shop_level: 95
 bow:
   bow:
     material: BOW
@@ -50,8 +50,8 @@ shield:
 trident:
   trident:
     material: TRIDENT
-    required_shop_level: 80
+    required_shop_level: 85
 mace:
   mace:
     material: MACE
-    required_shop_level: 90
+    required_shop_level: 100
