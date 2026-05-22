@@ -13,6 +13,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -125,6 +126,22 @@ public class ShopListener implements Listener {
                         player.closeInventory();
                         Bukkit.getScheduler().runTask(HereShoppyPlugin.getInstance(), () -> ShopGUI.openSearchMenu(player, state));
                     }
+                    case 51 -> {
+                        // Previous Page (Arrow)
+                        if (clicked.getType() == Material.ARROW && state.getPage() > 0) {
+                            state.setPage(state.getPage() - 1);
+                            player.closeInventory();
+                            Bukkit.getScheduler().runTask(HereShoppyPlugin.getInstance(), () -> ShopGUI.openSearchMenu(player, state));
+                        }
+                    }
+                    case 52 -> {
+                        // Next Page (Arrow)
+                        if (clicked.getType() == Material.ARROW) {
+                            state.setPage(state.getPage() + 1);
+                            player.closeInventory();
+                            Bukkit.getScheduler().runTask(HereShoppyPlugin.getInstance(), () -> ShopGUI.openSearchMenu(player, state));
+                        }
+                    }
                     case 53 -> {
                         // Back to Shop (Barrier)
                         player.closeInventory();
@@ -135,7 +152,28 @@ public class ShopListener implements Listener {
             }
             
             if (slot < 45) {
-                purchaseItem(player, clicked);
+                ClickType clickType = event.getClick();
+                if (clickType == ClickType.LEFT) {
+                    purchaseItem(player, clicked);
+                } else if (clickType == ClickType.MIDDLE) {
+                    if (event.isShiftClick()) {
+                        // Previous page via shift middle-click
+                        if (state.getPage() > 0) {
+                            state.setPage(state.getPage() - 1);
+                            player.closeInventory();
+                            Bukkit.getScheduler().runTask(HereShoppyPlugin.getInstance(), () -> ShopGUI.openSearchMenu(player, state));
+                        }
+                    } else {
+                        // Next page via middle-click
+                        int currentLevel = HereshoppyAPI.getLevel(player.getUniqueId());
+                        List<ItemManager.ShopItem> matches = ShopGUI.getSearchMatches(state, currentLevel);
+                        if (matches.size() > (state.getPage() + 1) * 45) {
+                            state.setPage(state.getPage() + 1);
+                            player.closeInventory();
+                            Bukkit.getScheduler().runTask(HereShoppyPlugin.getInstance(), () -> ShopGUI.openSearchMenu(player, state));
+                        }
+                    }
+                }
             }
             return;
         }
@@ -154,7 +192,41 @@ public class ShopListener implements Listener {
                 }
             }
         } else if (holder instanceof ShopGUI.CategoryMenuHolder catHolder) {
-            handleCategoryClick(player, clicked, catHolder, event.getSlot());
+            ClickType clickType = event.getClick();
+            int slot = event.getSlot();
+            if (slot < 45) {
+                if (clickType == ClickType.LEFT) {
+                    purchaseItem(player, clicked);
+                } else if (clickType == ClickType.MIDDLE) {
+                    if (event.isShiftClick()) {
+                        // Previous page via shift middle-click
+                        int currentPage = catHolder.getPage();
+                        if (currentPage > 0) {
+                            player.closeInventory();
+                            Bukkit.getScheduler().runTask(HereShoppyPlugin.getInstance(), () -> ShopGUI.openCategoryMenu(player, catHolder.getCategory(), currentPage - 1));
+                        }
+                    } else {
+                        // Next page via middle-click
+                        int currentPage = catHolder.getPage();
+                        int currentLevel = HereshoppyAPI.getLevel(player.getUniqueId());
+                        HereShoppyPlugin plugin = HereShoppyPlugin.getInstance();
+                        List<String> allKeys = plugin.getItemManager().getCategories().get(catHolder.getCategory());
+                        if (allKeys != null) {
+                            long availableCount = allKeys.stream()
+                                .map(key -> plugin.getItemManager().getShopItem(key))
+                                .filter(item -> item != null)
+                                .filter(item -> item.getRequiredLevel() <= currentLevel)
+                                .count();
+                            if (availableCount > (currentPage + 1) * 45) {
+                                player.closeInventory();
+                                Bukkit.getScheduler().runTask(plugin, () -> ShopGUI.openCategoryMenu(player, catHolder.getCategory(), currentPage + 1));
+                            }
+                        }
+                    }
+                }
+            } else {
+                handleCategoryClick(player, clicked, catHolder, slot);
+            }
         }
     }
 

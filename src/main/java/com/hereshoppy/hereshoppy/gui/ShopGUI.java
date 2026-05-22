@@ -127,11 +127,8 @@ public class ShopGUI {
         player.openInventory(inv);
     }
 
-    public static void openSearchMenu(Player player, SearchFilterState state) {
+    public static List<ItemManager.ShopItem> getSearchMatches(SearchFilterState state, int currentLevel) {
         HereShoppyPlugin plugin = HereShoppyPlugin.getInstance();
-        PlayerData data = plugin.getDataManager().getPlayerData(player.getUniqueId());
-        int currentLevel = data.getShopLevel();
-        
         List<ItemManager.ShopItem> matches = new ArrayList<>();
         if (state.hasAnyActiveFilter()) {
             for (ItemManager.ShopItem shopItem : plugin.getItemManager().getAllItems().values()) {
@@ -200,6 +197,15 @@ public class ShopGUI {
                 return a.getConfigKey().compareTo(b.getConfigKey());
             });
         }
+        return matches;
+    }
+
+    public static void openSearchMenu(Player player, SearchFilterState state) {
+        HereShoppyPlugin plugin = HereShoppyPlugin.getInstance();
+        PlayerData data = plugin.getDataManager().getPlayerData(player.getUniqueId());
+        int currentLevel = data.getShopLevel();
+        
+        List<ItemManager.ShopItem> matches = getSearchMatches(state, currentLevel);
 
         Inventory inv = Bukkit.createInventory(new SearchMenuHolder(state), 54, Component.text("Shop Search & Filter"));
         
@@ -216,8 +222,9 @@ public class ShopGUI {
             }
             inv.setItem(22, guideBook);
         } else {
-            for (int i = 0; i < 45 && i < matches.size(); i++) {
-                ItemManager.ShopItem shopItem = matches.get(i);
+            int start = state.getPage() * 45;
+            for (int i = 0; i < 45 && (start + i) < matches.size(); i++) {
+                ItemManager.ShopItem shopItem = matches.get(start + i);
                 inv.setItem(i, createShopItem(player, shopItem.getConfigKey(), shopItem.getRequiredLevel() > currentLevel));
             }
         }
@@ -298,6 +305,16 @@ public class ShopGUI {
             resetSearch.setItemMeta(resetMeta);
         }
         inv.setItem(50, resetSearch);
+
+        // Slot 51: Previous Page (Arrow)
+        if (state.getPage() > 0) {
+            inv.setItem(51, createNavItem("Previous Page", Material.ARROW));
+        }
+
+        // Slot 52: Next Page (Arrow)
+        if (matches.size() > (state.getPage() + 1) * 45) {
+            inv.setItem(52, createNavItem("Next Page", Material.ARROW));
+        }
 
         // Slot 53: Go Back (Barrier)
         inv.setItem(53, createNavItem("Back to Categories", Material.BARRIER));
@@ -469,21 +486,25 @@ public class ShopGUI {
         private String category = null;
         private String levelRange = "ALL";
         private String availability = "ALL";
+        private int page = 0;
 
         public String getQuery() { return query; }
-        public void setQuery(String query) { this.query = query; }
+        public void setQuery(String query) { this.query = query; this.page = 0; }
 
         public String getLetter() { return letter; }
-        public void setLetter(String letter) { this.letter = letter; }
+        public void setLetter(String letter) { this.letter = letter; this.page = 0; }
 
         public String getCategory() { return category; }
-        public void setCategory(String category) { this.category = category; }
+        public void setCategory(String category) { this.category = category; this.page = 0; }
 
         public String getLevelRange() { return levelRange; }
-        public void setLevelRange(String levelRange) { this.levelRange = levelRange; }
+        public void setLevelRange(String levelRange) { this.levelRange = levelRange; this.page = 0; }
 
         public String getAvailability() { return availability; }
-        public void setAvailability(String availability) { this.availability = availability; }
+        public void setAvailability(String availability) { this.availability = availability; this.page = 0; }
+
+        public int getPage() { return page; }
+        public void setPage(int page) { this.page = page; }
 
         public boolean hasAnyActiveFilter() {
             return query != null || letter != null || category != null || !levelRange.equals("ALL") || !availability.equals("ALL");
@@ -495,6 +516,7 @@ public class ShopGUI {
             category = null;
             levelRange = "ALL";
             availability = "ALL";
+            page = 0;
         }
     }
 
