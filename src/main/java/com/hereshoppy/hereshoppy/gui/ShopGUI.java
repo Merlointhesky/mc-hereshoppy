@@ -101,11 +101,15 @@ public class ShopGUI {
             inv.setItem(i, createShopItem(player, key, false));
         }
 
-        // Bottom row preview
-        if (currentLevel < 100) {
-            for (int i = 0; i < 9 && i < preview.size(); i++) {
-                inv.setItem(45 + i, createShopItem(player, preview.get(i), true));
-            }
+        // Clean restructuing of Row 6 (slots 45-53)
+        ItemStack borderPane = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
+        ItemMeta borderMeta = borderPane.getItemMeta();
+        if (borderMeta != null) {
+            borderMeta.displayName(Component.text(" "));
+            borderPane.setItemMeta(borderMeta);
+        }
+        for (int i = 45; i <= 53; i++) {
+            inv.setItem(i, borderPane.clone());
         }
 
         // Navigation
@@ -116,13 +120,31 @@ public class ShopGUI {
             inv.setItem(53, createNavItem("Next Page", Material.ARROW));
         }
         
-        // Randomise button for specific categories
+        // Randomise/Refresh button
         if (isRandomizableCategory(category)) {
-            inv.setItem(49, createNavItem("Randomise Stock", Material.SUNFLOWER));
+            ItemStack randomiseItem = new ItemStack(Material.SUNFLOWER);
+            ItemMeta randMeta = randomiseItem.getItemMeta();
+            if (randMeta != null) {
+                randMeta.displayName(Component.text("Refresh Enchants", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
+                List<Component> randLore = new ArrayList<>();
+                randLore.add(Component.text("Click to randomise stock and enchants.", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+                randLore.add(Component.text("Keybind: Press F or Q to refresh!", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false));
+                randMeta.lore(randLore);
+                randomiseItem.setItemMeta(randMeta);
+            }
+            inv.setItem(49, randomiseItem);
         }
 
         // Back button
         inv.setItem(48, createNavItem("Back to Categories", Material.BARRIER));
+
+        // Previews in dedicated slots: 46, 47, 50, 51, 52
+        int[] previewSlots = {46, 47, 50, 51, 52};
+        if (currentLevel < 100) {
+            for (int i = 0; i < previewSlots.length && i < preview.size(); i++) {
+                inv.setItem(previewSlots[i], createShopItem(player, preview.get(i), true));
+            }
+        }
 
         player.openInventory(inv);
     }

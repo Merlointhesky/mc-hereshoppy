@@ -80,3 +80,7 @@ special:
   clock:
     material: CLOCK
     required_shop_level: 10
+  flint_and_steel:
+    material: FLINT_AND_STEEL
+    required_shop_level: 10
+

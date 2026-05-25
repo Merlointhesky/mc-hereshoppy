@@ -36,9 +36,6 @@ gold:
   gold_block:
     material: GOLD_BLOCK
     required_shop_level: 40
-  golden_rail:
-    material: POWERED_RAIL
-    required_shop_level: 40
   bell:
     material: BELL
     required_shop_level: 50
@@ -59,9 +56,6 @@ misc:
   hopper:
     material: HOPPER
     required_shop_level: 30
-  minecart:
-    material: MINECART
-    required_shop_level: 15
   cauldron:
     material: CAULDRON
     required_shop_level: 15

@@ -84,3 +84,32 @@ sensors:
   sculk_shrieker:
     material: SCULK_SHRIEKER
     required_shop_level: 100
+transportation:
+  minecart:
+    material: MINECART
+    required_shop_level: 15
+  chest_minecart:
+    material: CHEST_MINECART
+    required_shop_level: 20
+  furnace_minecart:
+    material: FURNACE_MINECART
+    required_shop_level: 25
+  rail:
+    material: RAIL
+    required_shop_level: 30
+  powered_rail:
+    material: POWERED_RAIL
+    required_shop_level: 40
+  detector_rail:
+    material: DETECTOR_RAIL
+    required_shop_level: 45
+  hopper_minecart:
+    material: HOPPER_MINECART
+    required_shop_level: 50
+  activator_rail:
+    material: ACTIVATOR_RAIL
+    required_shop_level: 55
+  tnt_minecart:
+    material: TNT_MINECART
+    required_shop_level: 60
+

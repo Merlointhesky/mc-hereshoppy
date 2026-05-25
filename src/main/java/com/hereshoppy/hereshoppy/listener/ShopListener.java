@@ -193,6 +193,15 @@ public class ShopListener implements Listener {
             }
         } else if (holder instanceof ShopGUI.CategoryMenuHolder catHolder) {
             ClickType clickType = event.getClick();
+            if (clickType == ClickType.SWAP_OFFHAND || clickType == ClickType.DROP) {
+                event.setCancelled(true);
+                if (ShopGUI.isRandomizableCategory(catHolder.getCategory())) {
+                    player.sendMessage(Component.text("Stock randomised via keybind!", NamedTextColor.GREEN));
+                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1f, 1f);
+                    ShopGUI.openCategoryMenu(player, catHolder.getCategory(), catHolder.getPage());
+                }
+                return;
+            }
             int slot = event.getSlot();
             if (slot < 45) {
                 if (clickType == ClickType.LEFT) {

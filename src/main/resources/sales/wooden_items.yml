@@ -98,3 +98,65 @@ misc:
   bowl:
     material: BOWL
     required_shop_level: 0
+boats:
+  oak_boat:
+    material: OAK_BOAT
+    required_shop_level: 10
+  oak_chest_boat:
+    material: OAK_CHEST_BOAT
+    required_shop_level: 10
+  spruce_boat:
+    material: SPRUCE_BOAT
+    required_shop_level: 15
+  spruce_chest_boat:
+    material: SPRUCE_CHEST_BOAT
+    required_shop_level: 15
+  birch_boat:
+    material: BIRCH_BOAT
+    required_shop_level: 15
+  birch_chest_boat:
+    material: BIRCH_CHEST_BOAT
+    required_shop_level: 15
+  jungle_boat:
+    material: JUNGLE_BOAT
+    required_shop_level: 20
+  jungle_chest_boat:
+    material: JUNGLE_CHEST_BOAT
+    required_shop_level: 20
+  acacia_boat:
+    material: ACACIA_BOAT
+    required_shop_level: 20
+  acacia_chest_boat:
+    material: ACACIA_CHEST_BOAT
+    required_shop_level: 20
+  dark_oak_boat:
+    material: DARK_OAK_BOAT
+    required_shop_level: 25
+  dark_oak_chest_boat:
+    material: DARK_OAK_CHEST_BOAT
+    required_shop_level: 25
+  mangrove_boat:
+    material: MANGROVE_BOAT
+    required_shop_level: 25
+  mangrove_chest_boat:
+    material: MANGROVE_CHEST_BOAT
+    required_shop_level: 25
+  cherry_boat:
+    material: CHERRY_BOAT
+    required_shop_level: 25
+  cherry_chest_boat:
+    material: CHERRY_CHEST_BOAT
+    required_shop_level: 25
+  bamboo_raft:
+    material: BAMBOO_RAFT
+    required_shop_level: 30
+  bamboo_chest_raft:
+    material: BAMBOO_CHEST_RAFT
+    required_shop_level: 30
+  pale_oak_boat:
+    material: PALE_OAK_BOAT
+    required_shop_level: 30
+  pale_oak_chest_boat:
+    material: PALE_OAK_CHEST_BOAT
+    required_shop_level: 30
+

@@ -23,3 +23,5 @@ jar {
     archiveBaseName = 'HereShoppy'
     archiveVersion = version
 }
+
+
