@@ -1,0 +1,162 @@
+logs:
+  oak_log:
+    material: OAK_LOG
+    required_shop_level: 0
+  spruce_log:
+    material: SPRUCE_LOG
+    required_shop_level: 60
+  birch_log:
+    material: BIRCH_LOG
+    required_shop_level: 10
+  jungle_log:
+    material: JUNGLE_LOG
+    required_shop_level: 20
+  acacia_log:
+    material: ACACIA_LOG
+    required_shop_level: 60
+  dark_oak_log:
+    material: DARK_OAK_LOG
+    required_shop_level: 20
+  mangrove_log:
+    material: MANGROVE_LOG
+    required_shop_level: 60
+  cherry_log:
+    material: CHERRY_LOG
+    required_shop_level: 60
+  pale_oak_log:
+    material: PALE_OAK_LOG
+    required_shop_level: 80
+planks:
+  oak_planks:
+    material: OAK_PLANKS
+    required_shop_level: 0
+  spruce_planks:
+    material: SPRUCE_PLANKS
+    required_shop_level: 60
+  birch_planks:
+    material: BIRCH_PLANKS
+    required_shop_level: 10
+  jungle_planks:
+    material: JUNGLE_PLANKS
+    required_shop_level: 20
+  acacia_planks:
+    material: ACACIA_PLANKS
+    required_shop_level: 60
+  dark_oak_planks:
+    material: DARK_OAK_PLANKS
+    required_shop_level: 20
+  mangrove_planks:
+    material: MANGROVE_PLANKS
+    required_shop_level: 60
+  cherry_planks:
+    material: CHERRY_PLANKS
+    required_shop_level: 60
+  pale_oak_planks:
+    material: PALE_OAK_PLANKS
+    required_shop_level: 80
+  bamboo_planks:
+    material: BAMBOO_PLANKS
+    required_shop_level: 60
+furniture:
+  oak_door:
+    material: OAK_DOOR
+    required_shop_level: 5
+  oak_trapdoor:
+    material: OAK_TRAPDOOR
+    required_shop_level: 5
+  oak_fence:
+    material: OAK_FENCE
+    required_shop_level: 5
+  oak_fence_gate:
+    material: OAK_FENCE_GATE
+    required_shop_level: 5
+  oak_stairs:
+    material: OAK_STAIRS
+    required_shop_level: 5
+  oak_slab:
+    material: OAK_SLAB
+    required_shop_level: 5
+misc:
+  stick:
+    material: STICK
+    required_shop_level: 0
+  chest:
+    material: CHEST
+    required_shop_level: 5
+  crafting_table:
+    material: CRAFTING_TABLE
+    required_shop_level: 0
+  barrel:
+    material: BARREL
+    required_shop_level: 10
+  sign:
+    material: OAK_SIGN
+    required_shop_level: 5
+  ladder:
+    material: LADDER
+    required_shop_level: 5
+  bowl:
+    material: BOWL
+    required_shop_level: 0
+boats:
+  oak_boat:
+    material: OAK_BOAT
+    required_shop_level: 10
+  oak_chest_boat:
+    material: OAK_CHEST_BOAT
+    required_shop_level: 10
+  spruce_boat:
+    material: SPRUCE_BOAT
+    required_shop_level: 15
+  spruce_chest_boat:
+    material: SPRUCE_CHEST_BOAT
+    required_shop_level: 15
+  birch_boat:
+    material: BIRCH_BOAT
+    required_shop_level: 15
+  birch_chest_boat:
+    material: BIRCH_CHEST_BOAT
+    required_shop_level: 15
+  jungle_boat:
+    material: JUNGLE_BOAT
+    required_shop_level: 20
+  jungle_chest_boat:
+    material: JUNGLE_CHEST_BOAT
+    required_shop_level: 20
+  acacia_boat:
+    material: ACACIA_BOAT
+    required_shop_level: 20
+  acacia_chest_boat:
+    material: ACACIA_CHEST_BOAT
+    required_shop_level: 20
+  dark_oak_boat:
+    material: DARK_OAK_BOAT
+    required_shop_level: 25
+  dark_oak_chest_boat:
+    material: DARK_OAK_CHEST_BOAT
+    required_shop_level: 25
+  mangrove_boat:
+    material: MANGROVE_BOAT
+    required_shop_level: 25
+  mangrove_chest_boat:
+    material: MANGROVE_CHEST_BOAT
+    required_shop_level: 25
+  cherry_boat:
+    material: CHERRY_BOAT
+    required_shop_level: 25
+  cherry_chest_boat:
+    material: CHERRY_CHEST_BOAT
+    required_shop_level: 25
+  bamboo_raft:
+    material: BAMBOO_RAFT
+    required_shop_level: 30
+  bamboo_chest_raft:
+    material: BAMBOO_CHEST_RAFT
+    required_shop_level: 30
+  pale_oak_boat:
+    material: PALE_OAK_BOAT
+    required_shop_level: 30
+  pale_oak_chest_boat:
+    material: PALE_OAK_CHEST_BOAT
+    required_shop_level: 30
+

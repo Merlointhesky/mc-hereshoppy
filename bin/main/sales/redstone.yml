@@ -1,0 +1,115 @@
+components:
+  redstone_dust:
+    material: REDSTONE
+    required_shop_level: 50
+  redstone_torch:
+    material: REDSTONE_TORCH
+    required_shop_level: 50
+  redstone_block:
+    material: REDSTONE_BLOCK
+    required_shop_level: 60
+  repeater:
+    material: REPEATER
+    required_shop_level: 50
+  comparator:
+    material: COMPARATOR
+    required_shop_level: 60
+  target:
+    material: TARGET
+    required_shop_level: 50
+  lever:
+    material: LEVER
+    required_shop_level: 10
+  button:
+    oak_button:
+      material: OAK_BUTTON
+      required_shop_level: 10
+    stone_button:
+      material: STONE_BUTTON
+      required_shop_level: 10
+  pressure_plate:
+    oak_pressure_plate:
+      material: OAK_PRESSURE_PLATE
+      required_shop_level: 10
+    stone_pressure_plate:
+      material: STONE_PRESSURE_PLATE
+      required_shop_level: 10
+    heavy_weighted_pressure_plate:
+      material: HEAVY_WEIGHTED_PRESSURE_PLATE
+      required_shop_level: 40
+    light_weighted_pressure_plate:
+      material: LIGHT_WEIGHTED_PRESSURE_PLATE
+      required_shop_level: 40
+mechanisms:
+  piston:
+    material: PISTON
+    required_shop_level: 50
+  sticky_piston:
+    material: STICKY_PISTON
+    required_shop_level: 60
+  dispenser:
+    material: DISPENSER
+    required_shop_level: 50
+  dropper:
+    material: DROPPER
+    required_shop_level: 40
+  observer:
+    material: OBSERVER
+    required_shop_level: 50
+  daylight_detector:
+    material: DAYLIGHT_DETECTOR
+    required_shop_level: 60
+  tnt:
+    material: TNT
+    required_shop_level: 80
+  lamp:
+    material: REDSTONE_LAMP
+    required_shop_level: 60
+  note_block:
+    material: NOTE_BLOCK
+    required_shop_level: 40
+  jukebox:
+    material: JUKEBOX
+    required_shop_level: 80
+  crafter:
+    material: CRAFTER
+    required_shop_level: 70
+sensors:
+  sculk_sensor:
+    material: SCULK_SENSOR
+    required_shop_level: 80
+  calibrated_sculk_sensor:
+    material: CALIBRATED_SCULK_SENSOR
+    required_shop_level: 90
+  sculk_shrieker:
+    material: SCULK_SHRIEKER
+    required_shop_level: 100
+transportation:
+  minecart:
+    material: MINECART
+    required_shop_level: 15
+  chest_minecart:
+    material: CHEST_MINECART
+    required_shop_level: 20
+  furnace_minecart:
+    material: FURNACE_MINECART
+    required_shop_level: 25
+  rail:
+    material: RAIL
+    required_shop_level: 30
+  powered_rail:
+    material: POWERED_RAIL
+    required_shop_level: 40
+  detector_rail:
+    material: DETECTOR_RAIL
+    required_shop_level: 45
+  hopper_minecart:
+    material: HOPPER_MINECART
+    required_shop_level: 50
+  activator_rail:
+    material: ACTIVATOR_RAIL
+    required_shop_level: 55
+  tnt_minecart:
+    material: TNT_MINECART
+    required_shop_level: 60
+

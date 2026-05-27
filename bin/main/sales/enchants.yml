@@ -1,0 +1,291 @@
+armor_and_utility:
+  protection_1:
+    material: ENCHANTED_BOOK
+    enchant_type: protection
+    enchant_level: 1
+    required_shop_level: 30
+  protection_2:
+    material: ENCHANTED_BOOK
+    enchant_type: protection
+    enchant_level: 2
+    required_shop_level: 50
+  protection_3:
+    material: ENCHANTED_BOOK
+    enchant_type: protection
+    enchant_level: 3
+    required_shop_level: 70
+  protection_4:
+    material: ENCHANTED_BOOK
+    enchant_type: protection
+    enchant_level: 4
+    required_shop_level: 90
+  fire_protection_4:
+    material: ENCHANTED_BOOK
+    enchant_type: fire_protection
+    enchant_level: 4
+    required_shop_level: 85
+  blast_protection_4:
+    material: ENCHANTED_BOOK
+    enchant_type: blast_protection
+    enchant_level: 4
+    required_shop_level: 80
+  projectile_protection_4:
+    material: ENCHANTED_BOOK
+    enchant_type: projectile_protection
+    enchant_level: 4
+    required_shop_level: 75
+  feather_falling_1:
+    material: ENCHANTED_BOOK
+    enchant_type: feather_falling
+    enchant_level: 1
+    required_shop_level: 30
+  feather_falling_2:
+    material: ENCHANTED_BOOK
+    enchant_type: feather_falling
+    enchant_level: 2
+    required_shop_level: 50
+  feather_falling_3:
+    material: ENCHANTED_BOOK
+    enchant_type: feather_falling
+    enchant_level: 3
+    required_shop_level: 70
+  feather_falling_4:
+    material: ENCHANTED_BOOK
+    enchant_type: feather_falling
+    enchant_level: 4
+    required_shop_level: 90
+  respiration_3:
+    material: ENCHANTED_BOOK
+    enchant_type: respiration
+    enchant_level: 3
+    required_shop_level: 75
+  aqua_affinity:
+    material: ENCHANTED_BOOK
+    enchant_type: aqua_affinity
+    enchant_level: 1
+    required_shop_level: 40
+  depth_strider_3:
+    material: ENCHANTED_BOOK
+    enchant_type: depth_strider
+    enchant_level: 3
+    required_shop_level: 75
+  soul_speed_3:
+    material: ENCHANTED_BOOK
+    enchant_type: soul_speed
+    enchant_level: 3
+    required_shop_level: 85
+  thorns_3:
+    material: ENCHANTED_BOOK
+    enchant_type: thorns
+    enchant_level: 3
+    required_shop_level: 85
+  swift_sneak_3:
+    material: ENCHANTED_BOOK
+    enchant_type: swift_sneak
+    enchant_level: 3
+    required_shop_level: 90
+
+melee_combat:
+  sharpness_1:
+    material: ENCHANTED_BOOK
+    enchant_type: sharpness
+    enchant_level: 1
+    required_shop_level: 25
+  sharpness_2:
+    material: ENCHANTED_BOOK
+    enchant_type: sharpness
+    enchant_level: 2
+    required_shop_level: 40
+  sharpness_3:
+    material: ENCHANTED_BOOK
+    enchant_type: sharpness
+    enchant_level: 3
+    required_shop_level: 60
+  sharpness_4:
+    material: ENCHANTED_BOOK
+    enchant_type: sharpness
+    enchant_level: 4
+    required_shop_level: 80
+  sharpness_5:
+    material: ENCHANTED_BOOK
+    enchant_type: sharpness
+    enchant_level: 5
+    required_shop_level: 95
+  knockback_2:
+    material: ENCHANTED_BOOK
+    enchant_type: knockback
+    enchant_level: 2
+    required_shop_level: 65
+  looting_1:
+    material: ENCHANTED_BOOK
+    enchant_type: looting
+    enchant_level: 1
+    required_shop_level: 45
+  looting_2:
+    material: ENCHANTED_BOOK
+    enchant_type: looting
+    enchant_level: 2
+    required_shop_level: 70
+  looting_3:
+    material: ENCHANTED_BOOK
+    enchant_type: looting
+    enchant_level: 3
+    required_shop_level: 90
+  fire_aspect_2:
+    material: ENCHANTED_BOOK
+    enchant_type: fire_aspect
+    enchant_level: 2
+    required_shop_level: 75
+  sweeping_edge_3:
+    material: ENCHANTED_BOOK
+    enchant_type: sweeping_edge
+    enchant_level: 3
+    required_shop_level: 75
+  smite_5:
+    material: ENCHANTED_BOOK
+    enchant_type: smite
+    enchant_level: 5
+    required_shop_level: 80
+
+ranged_combat:
+  power_5:
+    material: ENCHANTED_BOOK
+    enchant_type: power
+    enchant_level: 5
+    required_shop_level: 95
+  punch_2:
+    material: ENCHANTED_BOOK
+    enchant_type: punch
+    enchant_level: 2
+    required_shop_level: 70
+  flame:
+    material: ENCHANTED_BOOK
+    enchant_type: flame
+    enchant_level: 1
+    required_shop_level: 60
+  infinity:
+    material: ENCHANTED_BOOK
+    enchant_type: infinity
+    enchant_level: 1
+    required_shop_level: 85
+  multishot:
+    material: ENCHANTED_BOOK
+    enchant_type: multishot
+    enchant_level: 1
+    required_shop_level: 50
+  quick_charge_3:
+    material: ENCHANTED_BOOK
+    enchant_type: quick_charge
+    enchant_level: 3
+    required_shop_level: 80
+  piercing_4:
+    material: ENCHANTED_BOOK
+    enchant_type: piercing
+    enchant_level: 4
+    required_shop_level: 85
+
+tools:
+  efficiency_1:
+    material: ENCHANTED_BOOK
+    enchant_type: efficiency
+    enchant_level: 1
+    required_shop_level: 20
+  efficiency_2:
+    material: ENCHANTED_BOOK
+    enchant_type: efficiency
+    enchant_level: 2
+    required_shop_level: 40
+  efficiency_3:
+    material: ENCHANTED_BOOK
+    enchant_type: efficiency
+    enchant_level: 3
+    required_shop_level: 60
+  efficiency_4:
+    material: ENCHANTED_BOOK
+    enchant_type: efficiency
+    enchant_level: 4
+    required_shop_level: 80
+  efficiency_5:
+    material: ENCHANTED_BOOK
+    enchant_type: efficiency
+    enchant_level: 5
+    required_shop_level: 95
+  silk_touch:
+    material: ENCHANTED_BOOK
+    enchant_type: silk_touch
+    enchant_level: 1
+    required_shop_level: 75
+  fortune_1:
+    material: ENCHANTED_BOOK
+    enchant_type: fortune
+    enchant_level: 1
+    required_shop_level: 45
+  fortune_2:
+    material: ENCHANTED_BOOK
+    enchant_type: fortune
+    enchant_level: 2
+    required_shop_level: 70
+  fortune_3:
+    material: ENCHANTED_BOOK
+    enchant_type: fortune
+    enchant_level: 3
+    required_shop_level: 95
+
+trident_and_mace_1_21:
+  loyalty_3:
+    material: ENCHANTED_BOOK
+    enchant_type: loyalty
+    enchant_level: 3
+    required_shop_level: 75
+  channeling:
+    material: ENCHANTED_BOOK
+    enchant_type: channeling
+    enchant_level: 1
+    required_shop_level: 75
+  riptide_3:
+    material: ENCHANTED_BOOK
+    enchant_type: riptide
+    enchant_level: 3
+    required_shop_level: 85
+  impaling_5:
+    material: ENCHANTED_BOOK
+    enchant_type: impaling
+    enchant_level: 5
+    required_shop_level: 85
+  density_5:
+    material: ENCHANTED_BOOK
+    enchant_type: density
+    enchant_level: 5
+    required_shop_level: 90
+  breach_4:
+    material: ENCHANTED_BOOK
+    enchant_type: breach
+    enchant_level: 4
+    required_shop_level: 95
+  wind_burst_3:
+    material: ENCHANTED_BOOK
+    enchant_type: wind_burst
+    enchant_level: 3
+    required_shop_level: 99
+
+general:
+  unbreaking_1:
+    material: ENCHANTED_BOOK
+    enchant_type: unbreaking
+    enchant_level: 1
+    required_shop_level: 25
+  unbreaking_2:
+    material: ENCHANTED_BOOK
+    enchant_type: unbreaking
+    enchant_level: 2
+    required_shop_level: 50
+  unbreaking_3:
+    material: ENCHANTED_BOOK
+    enchant_type: unbreaking
+    enchant_level: 3
+    required_shop_level: 75
+  mending:
+    material: ENCHANTED_BOOK
+    enchant_type: mending
+    enchant_level: 1
+    required_shop_level: 95

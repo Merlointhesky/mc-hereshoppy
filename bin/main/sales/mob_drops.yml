@@ -1,0 +1,66 @@
+common:
+  rotten_flesh:
+    material: ROTTEN_FLESH
+    required_shop_level: 0
+  bone:
+    material: BONE
+    required_shop_level: 0
+  string:
+    material: STRING
+    required_shop_level: 0
+  spider_eye:
+    material: SPIDER_EYE
+    required_shop_level: 5
+  gunpowder:
+    material: GUNPOWDER
+    required_shop_level: 10
+  ender_pearl:
+    material: ENDER_PEARL
+    required_shop_level: 80
+uncommon:
+  slime_ball:
+    material: SLIME_BALL
+    required_shop_level: 50
+  magma_cream:
+    material: MAGMA_CREAM
+    required_shop_level: 50
+  blaze_rod:
+    material: BLAZE_ROD
+    required_shop_level: 70
+  ghast_tear:
+    material: GHAST_TEAR
+    required_shop_level: 80
+  phantom_membrane:
+    material: PHANTOM_MEMBRANE
+    required_shop_level: 30
+  breeze_rod:
+    material: BREEZE_ROD
+    required_shop_level: 70
+  wind_charge:
+    material: WIND_CHARGE
+    required_shop_level: 60
+rare:
+  shulker_shell:
+    material: SHULKER_SHELL
+    required_shop_level: 90
+  wither_skeleton_skull:
+    material: WITHER_SKELETON_SKULL
+    required_shop_level: 95
+  nether_star:
+    material: NETHER_STAR
+    required_shop_level: 100
+  heart_of_the_sea:
+    material: HEART_OF_THE_SEA
+    required_shop_level: 50
+  nautilus_shell:
+    material: NAUTILUS_SHELL
+    required_shop_level: 30
+  echo_shard:
+    material: ECHO_SHARD
+    required_shop_level: 90
+  heavy_core:
+    material: HEAVY_CORE
+    required_shop_level: 100
+  ominous_bottle:
+    material: OMINOUS_BOTTLE
+    required_shop_level: 70

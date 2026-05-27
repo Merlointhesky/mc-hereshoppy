@@ -1,0 +1,5 @@
+# HereShoppy Configuration
+
+# Cooldown in hours before a purchased item can be resold to the shop.
+# Set to 0 to disable the cooldown.
+resale-cooldown-hours: 24

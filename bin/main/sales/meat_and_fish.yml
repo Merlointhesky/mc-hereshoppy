@@ -1,0 +1,75 @@
+meat:
+  raw_beef:
+    material: BEEF
+    required_shop_level: 0
+  cooked_beef:
+    material: COOKED_BEEF
+    required_shop_level: 10
+  raw_porkchop:
+    material: PORKCHOP
+    required_shop_level: 0
+  cooked_porkchop:
+    material: COOKED_PORKCHOP
+    required_shop_level: 10
+  raw_mutton:
+    material: MUTTON
+    required_shop_level: 0
+  cooked_mutton:
+    material: COOKED_MUTTON
+    required_shop_level: 10
+  raw_chicken:
+    material: CHICKEN
+    required_shop_level: 0
+  cooked_chicken:
+    material: COOKED_CHICKEN
+    required_shop_level: 10
+  raw_rabbit:
+    material: RABBIT
+    required_shop_level: 10
+  cooked_rabbit:
+    material: COOKED_RABBIT
+    required_shop_level: 20
+fish:
+  raw_cod:
+    material: COD
+    required_shop_level: 0
+  cooked_cod:
+    material: COOKED_COD
+    required_shop_level: 10
+  raw_salmon:
+    material: SALMON
+    required_shop_level: 10
+  cooked_salmon:
+    material: COOKED_SALMON
+    required_shop_level: 20
+  tropical_fish:
+    material: TROPICAL_FISH
+    required_shop_level: 30
+  pufferfish:
+    material: PUFFERFISH
+    required_shop_level: 30
+misc:
+  egg:
+    material: EGG
+    required_shop_level: 0
+  honey_bottle:
+    material: HONEY_BOTTLE
+    required_shop_level: 20
+  honeycomb:
+    material: HONEYCOMB
+    required_shop_level: 20
+  milk_bucket:
+    material: MILK_BUCKET
+    required_shop_level: 10
+  sniffer_egg:
+    material: SNIFFER_EGG
+    required_shop_level: 100
+  armadillo_scute:
+    material: ARMADILLO_SCUTE
+    required_shop_level: 30
+  turtle_egg:
+    material: TURTLE_EGG
+    required_shop_level: 40
+  turtle_scute:
+    material: TURTLE_SCUTE
+    required_shop_level: 50

@@ -1,0 +1,241 @@
+basic:
+  glass_bottle:
+    material: GLASS_BOTTLE
+    required_shop_level: 20
+  water_bottle:
+    material: POTION
+    potion_type: water
+    required_shop_level: 20
+  mundane_potion:
+    material: POTION
+    potion_type: mundane
+    required_shop_level: 20
+  thick_potion:
+    material: POTION
+    potion_type: thick
+    required_shop_level: 20
+  awkward_potion:
+    material: POTION
+    potion_type: awkward
+    required_shop_level: 30
+
+standard_potions:
+  night_vision_potion:
+    material: POTION
+    potion_type: night_vision
+    required_shop_level: 45
+  invisibility_potion:
+    material: POTION
+    potion_type: invisibility
+    required_shop_level: 50
+  leaping_potion:
+    material: POTION
+    potion_type: leaping
+    required_shop_level: 45
+  fire_resistance_potion:
+    material: POTION
+    potion_type: fire_resistance
+    required_shop_level: 45
+  speed_potion:
+    material: POTION
+    potion_type: swiftness
+    required_shop_level: 45
+  slowness_potion:
+    material: POTION
+    potion_type: slowness
+    required_shop_level: 45
+  water_breathing_potion:
+    material: POTION
+    potion_type: water_breathing
+    required_shop_level: 45
+  healing_potion:
+    material: POTION
+    potion_type: healing
+    required_shop_level: 50
+  harming_potion:
+    material: POTION
+    potion_type: harming
+    required_shop_level: 50
+  poison_potion:
+    material: POTION
+    potion_type: poison
+    required_shop_level: 50
+  regeneration_potion:
+    material: POTION
+    potion_type: regeneration
+    required_shop_level: 55
+  strength_potion:
+    material: POTION
+    potion_type: strength
+    required_shop_level: 60
+  weakness_potion:
+    material: POTION
+    potion_type: weakness
+    required_shop_level: 45
+  slow_falling_potion:
+    material: POTION
+    potion_type: slow_falling
+    required_shop_level: 50
+  turtle_master_potion:
+    material: POTION
+    potion_type: turtle_master
+    required_shop_level: 75
+
+extended_potions:
+  long_night_vision_potion:
+    material: POTION
+    potion_type: long_night_vision
+    required_shop_level: 60
+  long_invisibility_potion:
+    material: POTION
+    potion_type: long_invisibility
+    required_shop_level: 65
+  long_leaping_potion:
+    material: POTION
+    potion_type: long_leaping
+    required_shop_level: 60
+  long_fire_resistance_potion:
+    material: POTION
+    potion_type: long_fire_resistance
+    required_shop_level: 60
+  long_speed_potion:
+    material: POTION
+    potion_type: long_swiftness
+    required_shop_level: 60
+  long_slowness_potion:
+    material: POTION
+    potion_type: long_slowness
+    required_shop_level: 60
+  long_water_breathing_potion:
+    material: POTION
+    potion_type: long_water_breathing
+    required_shop_level: 60
+  long_poison_potion:
+    material: POTION
+    potion_type: long_poison
+    required_shop_level: 65
+  long_regeneration_potion:
+    material: POTION
+    potion_type: long_regeneration
+    required_shop_level: 70
+  long_strength_potion:
+    material: POTION
+    potion_type: long_strength
+    required_shop_level: 75
+  long_weakness_potion:
+    material: POTION
+    potion_type: long_weakness
+    required_shop_level: 60
+  long_slow_falling_potion:
+    material: POTION
+    potion_type: long_slow_falling
+    required_shop_level: 65
+  long_turtle_master_potion:
+    material: POTION
+    potion_type: long_turtle_master
+    required_shop_level: 85
+
+strong_potions:
+  strong_leaping_potion:
+    material: POTION
+    potion_type: strong_leaping
+    required_shop_level: 65
+  strong_speed_potion:
+    material: POTION
+    potion_type: strong_swiftness
+    required_shop_level: 65
+  strong_slowness_potion:
+    material: POTION
+    potion_type: strong_slowness
+    required_shop_level: 65
+  strong_healing_potion:
+    material: POTION
+    potion_type: strong_healing
+    required_shop_level: 70
+  strong_harming_potion:
+    material: POTION
+    potion_type: strong_harming
+    required_shop_level: 70
+  strong_poison_potion:
+    material: POTION
+    potion_type: strong_poison
+    required_shop_level: 70
+  strong_regeneration_potion:
+    material: POTION
+    potion_type: strong_regeneration
+    required_shop_level: 80
+  strong_strength_potion:
+    material: POTION
+    potion_type: strong_strength
+    required_shop_level: 85
+  strong_turtle_master_potion:
+    material: POTION
+    potion_type: strong_turtle_master
+    required_shop_level: 90
+
+trial_potions:
+  infested_potion:
+    material: POTION
+    potion_type: infested
+    required_shop_level: 80
+  oozing_potion:
+    material: POTION
+    potion_type: oozing
+    required_shop_level: 80
+  wind_charged_potion:
+    material: POTION
+    potion_type: wind_charged
+    required_shop_level: 90
+  weaving_potion:
+    material: POTION
+    potion_type: weaving
+    required_shop_level: 90
+
+ingredients:
+  nether_wart:
+    material: NETHER_WART
+    required_shop_level: 20
+  blaze_powder:
+    material: BLAZE_POWDER
+    required_shop_level: 25
+  ghast_tear:
+    material: GHAST_TEAR
+    required_shop_level: 80
+  magma_cream:
+    material: MAGMA_CREAM
+    required_shop_level: 50
+  glistering_melon_slice:
+    material: GLISTERING_MELON_SLICE
+    required_shop_level: 20
+  golden_carrot:
+    material: GOLDEN_CARROT
+    required_shop_level: 30
+  rabbit_foot:
+    material: RABBIT_FOOT
+    required_shop_level: 30
+  phantom_membrane:
+    material: PHANTOM_MEMBRANE
+    required_shop_level: 30
+  dragon_breath:
+    material: DRAGON_BREATH
+    required_shop_level: 95
+
+utility:
+  brewing_stand:
+    material: BREWING_STAND
+    required_shop_level: 30
+  cauldron:
+    material: CAULDRON
+    required_shop_level: 15
+  fermented_spider_eye:
+    material: FERMENTED_SPIDER_EYE
+    required_shop_level: 20
+  gunpowder:
+    material: GUNPOWDER
+    required_shop_level: 10
+  glowstone_dust:
+    material: GLOWSTONE_DUST
+    required_shop_level: 30
+  redstone:
+    material: REDSTONE
+    required_shop_level: 15
