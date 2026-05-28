@@ -42,22 +42,24 @@ public class ItemManager {
                 for (String key : config.getKeys(false)) {
                     ConfigurationSection mainSection = config.getConfigurationSection(key);
                     if (mainSection != null) {
-                        // Check if it's a direct item or a category of materials
-                        if (mainSection.contains("material")) {
-                            // Direct item
-                            loadItem(mainSection, key, categoryItems, file.getName());
-                        } else {
-                            // Nested materials
-                            for (String subKey : mainSection.getKeys(false)) {
-                                ConfigurationSection subSection = mainSection.getConfigurationSection(subKey);
-                                if (subSection != null) {
-                                    loadItem(subSection, subKey, categoryItems, file.getName());
-                                }
-                            }
-                        }
+                        parseSection(mainSection, key, categoryItems, file.getName());
                     }
                 }
                 categories.put(categoryName, categoryItems);
+            }
+        }
+    }
+
+    private void parseSection(ConfigurationSection section, String key, List<String> categoryItems, String fileName) {
+        if (section == null) return;
+        if (section.contains("material")) {
+            loadItem(section, key, categoryItems, fileName);
+        } else {
+            for (String subKey : section.getKeys(false)) {
+                ConfigurationSection subSection = section.getConfigurationSection(subKey);
+                if (subSection != null) {
+                    parseSection(subSection, subKey, categoryItems, fileName);
+                }
             }
         }
     }

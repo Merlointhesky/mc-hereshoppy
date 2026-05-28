@@ -54,7 +54,7 @@ copper:
     required_shop_level: 15
 misc:
   chain:
-    material: CHAIN
+    material: IRON_CHAIN
     required_shop_level: 10
   hopper:
     material: HOPPER
