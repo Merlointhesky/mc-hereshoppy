@@ -1,0 +1,28 @@
+materials:
+  clay_ball:
+    material: CLAY_BALL
+    required_shop_level: 5
+  brick:
+    material: BRICK
+    required_shop_level: 10
+  nether_brick:
+    material: NETHER_BRICK
+    required_shop_level: 25
+  flint:
+    material: FLINT
+    required_shop_level: 5
+  prismarine_shard:
+    material: PRISMARINE_SHARD
+    required_shop_level: 40
+  prismarine_crystals:
+    material: PRISMARINE_CRYSTALS
+    required_shop_level: 45
+  sculk:
+    material: SCULK
+    required_shop_level: 60
+  sculk_vein:
+    material: SCULK_VEIN
+    required_shop_level: 60
+  sculk_catalyst:
+    material: SCULK_CATALYST
+    required_shop_level: 80

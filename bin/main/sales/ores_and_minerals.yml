@@ -87,6 +87,9 @@ minerals:
   netherite_ingot:
     material: NETHERITE_INGOT
     required_shop_level: 95
+  glowstone_dust:
+    material: GLOWSTONE_DUST
+    required_shop_level: 30
 blocks:
   coal_block:
     material: COAL_BLOCK

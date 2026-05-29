@@ -1,0 +1,49 @@
+dyes:
+  white_dye:
+    material: WHITE_DYE
+    required_shop_level: 10
+  orange_dye:
+    material: ORANGE_DYE
+    required_shop_level: 10
+  magenta_dye:
+    material: MAGENTA_DYE
+    required_shop_level: 10
+  light_blue_dye:
+    material: LIGHT_BLUE_DYE
+    required_shop_level: 10
+  yellow_dye:
+    material: YELLOW_DYE
+    required_shop_level: 10
+  lime_dye:
+    material: LIME_DYE
+    required_shop_level: 10
+  pink_dye:
+    material: PINK_DYE
+    required_shop_level: 10
+  gray_dye:
+    material: GRAY_DYE
+    required_shop_level: 10
+  light_gray_dye:
+    material: LIGHT_GRAY_DYE
+    required_shop_level: 10
+  cyan_dye:
+    material: CYAN_DYE
+    required_shop_level: 10
+  purple_dye:
+    material: PURPLE_DYE
+    required_shop_level: 10
+  blue_dye:
+    material: BLUE_DYE
+    required_shop_level: 10
+  brown_dye:
+    material: BROWN_DYE
+    required_shop_level: 10
+  green_dye:
+    material: GREEN_DYE
+    required_shop_level: 10
+  red_dye:
+    material: RED_DYE
+    required_shop_level: 10
+  black_dye:
+    material: BLACK_DYE
+    required_shop_level: 10

@@ -58,6 +58,15 @@ prepared:
   beetroot_soup:
     material: BEETROOT_SOUP
     required_shop_level: 5
+  sugar:
+    material: SUGAR
+    required_shop_level: 5
+  popped_chorus_fruit:
+    material: POPPED_CHORUS_FRUIT
+    required_shop_level: 35
+  suspicious_stew:
+    material: SUSPICIOUS_STEW
+    required_shop_level: 20
 luxury:
   golden_apple:
     material: GOLDEN_APPLE
@@ -68,3 +77,7 @@ luxury:
   golden_carrot:
     material: GOLDEN_CARROT
     required_shop_level: 30
+  cake:
+    material: CAKE
+    required_shop_level: 25
+

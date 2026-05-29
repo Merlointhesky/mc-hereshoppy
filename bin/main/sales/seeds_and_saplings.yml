@@ -113,3 +113,46 @@ misc:
   small_dripleaf:
     material: SMALL_DRIPLEAF
     required_shop_level: 20
+  sugar_cane:
+    material: SUGAR_CANE
+    required_shop_level: 5
+  wheat:
+    material: WHEAT
+    required_shop_level: 5
+  bamboo:
+    material: BAMBOO
+    required_shop_level: 10
+  cactus:
+    material: CACTUS
+    required_shop_level: 10
+  sea_pickle:
+    material: SEA_PICKLE
+    required_shop_level: 20
+  lily_pad:
+    material: LILY_PAD
+    required_shop_level: 15
+  brown_mushroom:
+    material: BROWN_MUSHROOM
+    required_shop_level: 10
+  red_mushroom:
+    material: RED_MUSHROOM
+    required_shop_level: 10
+  crimson_fungus:
+    material: CRIMSON_FUNGUS
+    required_shop_level: 30
+  warped_fungus:
+    material: WARPED_FUNGUS
+    required_shop_level: 30
+  nether_wart:
+    material: NETHER_WART
+    required_shop_level: 30
+  glow_lichen:
+    material: GLOW_LICHEN
+    required_shop_level: 20
+  vine:
+    material: VINE
+    required_shop_level: 15
+  chorus_flower:
+    material: CHORUS_FLOWER
+    required_shop_level: 40
+

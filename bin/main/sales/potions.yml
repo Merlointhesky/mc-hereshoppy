@@ -192,50 +192,18 @@ trial_potions:
     required_shop_level: 90
 
 ingredients:
-  nether_wart:
-    material: NETHER_WART
-    required_shop_level: 20
   blaze_powder:
     material: BLAZE_POWDER
     required_shop_level: 25
-  ghast_tear:
-    material: GHAST_TEAR
-    required_shop_level: 80
-  magma_cream:
-    material: MAGMA_CREAM
-    required_shop_level: 50
   glistering_melon_slice:
     material: GLISTERING_MELON_SLICE
     required_shop_level: 20
-  golden_carrot:
-    material: GOLDEN_CARROT
-    required_shop_level: 30
-  rabbit_foot:
-    material: RABBIT_FOOT
-    required_shop_level: 30
-  phantom_membrane:
-    material: PHANTOM_MEMBRANE
-    required_shop_level: 30
-  dragon_breath:
-    material: DRAGON_BREATH
-    required_shop_level: 95
 
 utility:
   brewing_stand:
     material: BREWING_STAND
     required_shop_level: 30
-  cauldron:
-    material: CAULDRON
-    required_shop_level: 15
   fermented_spider_eye:
     material: FERMENTED_SPIDER_EYE
     required_shop_level: 20
-  gunpowder:
-    material: GUNPOWDER
-    required_shop_level: 10
-  glowstone_dust:
-    material: GLOWSTONE_DUST
-    required_shop_level: 30
-  redstone:
-    material: REDSTONE
-    required_shop_level: 15
+

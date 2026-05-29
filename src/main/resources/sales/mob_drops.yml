@@ -39,6 +39,9 @@ uncommon:
   wind_charge:
     material: WIND_CHARGE
     required_shop_level: 60
+  rabbit_foot:
+    material: RABBIT_FOOT
+    required_shop_level: 30
 rare:
   shulker_shell:
     material: SHULKER_SHELL

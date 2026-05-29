@@ -481,6 +481,8 @@ public class ShopGUI {
             case "building_blocks" -> Material.BRICKS;
             case "redstone" -> Material.REDSTONE;
             case "mob_drops" -> Material.ROTTEN_FLESH;
+            case "dyes" -> Material.ORANGE_DYE;
+            case "materials" -> Material.CLAY_BALL;
             default -> Material.CHEST;
         };
     }

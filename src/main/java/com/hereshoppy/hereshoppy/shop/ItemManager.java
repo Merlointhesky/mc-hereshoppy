@@ -93,7 +93,8 @@ public class ItemManager {
             "fruit_and_veg.yml", "meat_and_fish.yml", "wooden_items.yml",
             "metal_items.yml", "ores_and_minerals.yml", "seeds_and_saplings.yml",
             "potions.yml", "building_blocks.yml", "redstone.yml",
-            "mob_drops.yml", "other_items.yml", "enchants.yml"
+            "mob_drops.yml", "other_items.yml", "enchants.yml",
+            "dyes.yml", "materials.yml"
         };
         for (String fileName : defaultFiles) {
             File file = new File(salesDir, fileName);
