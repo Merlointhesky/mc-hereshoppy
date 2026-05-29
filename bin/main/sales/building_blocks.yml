@@ -5,6 +5,9 @@ stone:
   cobblestone:
     material: COBBLESTONE
     required_shop_level: 0
+  mossy_cobblestone:
+    material: MOSSY_COBBLESTONE
+    required_shop_level: 5
   smooth_stone:
     material: SMOOTH_STONE
     required_shop_level: 10
@@ -58,6 +61,30 @@ sand:
   red_sand:
     material: RED_SAND
     required_shop_level: 5
+  sandstone:
+    material: SANDSTONE
+    required_shop_level: 5
+  chiseled_sandstone:
+    material: CHISELED_SANDSTONE
+    required_shop_level: 10
+  smooth_sandstone:
+    material: SMOOTH_SANDSTONE
+    required_shop_level: 10
+  cut_sandstone:
+    material: CUT_SANDSTONE
+    required_shop_level: 10
+  red_sandstone:
+    material: RED_SANDSTONE
+    required_shop_level: 10
+  chiseled_red_sandstone:
+    material: CHISELED_RED_SANDSTONE
+    required_shop_level: 15
+  smooth_red_sandstone:
+    material: SMOOTH_RED_SANDSTONE
+    required_shop_level: 15
+  cut_red_sandstone:
+    material: CUT_RED_SANDSTONE
+    required_shop_level: 15
   gravel:
     material: GRAVEL
     required_shop_level: 0
@@ -81,6 +108,102 @@ glass:
   tinted_glass:
     material: TINTED_GLASS
     required_shop_level: 30
+  white_stained_glass:
+    material: WHITE_STAINED_GLASS
+    required_shop_level: 12
+  white_stained_glass_pane:
+    material: WHITE_STAINED_GLASS_PANE
+    required_shop_level: 12
+  orange_stained_glass:
+    material: ORANGE_STAINED_GLASS
+    required_shop_level: 12
+  orange_stained_glass_pane:
+    material: ORANGE_STAINED_GLASS_PANE
+    required_shop_level: 12
+  magenta_stained_glass:
+    material: MAGENTA_STAINED_GLASS
+    required_shop_level: 12
+  magenta_stained_glass_pane:
+    material: MAGENTA_STAINED_GLASS_PANE
+    required_shop_level: 12
+  light_blue_stained_glass:
+    material: LIGHT_BLUE_STAINED_GLASS
+    required_shop_level: 12
+  light_blue_stained_glass_pane:
+    material: LIGHT_BLUE_STAINED_GLASS_PANE
+    required_shop_level: 12
+  yellow_stained_glass:
+    material: YELLOW_STAINED_GLASS
+    required_shop_level: 12
+  yellow_stained_glass_pane:
+    material: YELLOW_STAINED_GLASS_PANE
+    required_shop_level: 12
+  lime_stained_glass:
+    material: LIME_STAINED_GLASS
+    required_shop_level: 12
+  lime_stained_glass_pane:
+    material: LIME_STAINED_GLASS_PANE
+    required_shop_level: 12
+  pink_stained_glass:
+    material: PINK_STAINED_GLASS
+    required_shop_level: 12
+  pink_stained_glass_pane:
+    material: PINK_STAINED_GLASS_PANE
+    required_shop_level: 12
+  gray_stained_glass:
+    material: GRAY_STAINED_GLASS
+    required_shop_level: 12
+  gray_stained_glass_pane:
+    material: GRAY_STAINED_GLASS_PANE
+    required_shop_level: 12
+  light_gray_stained_glass:
+    material: LIGHT_GRAY_STAINED_GLASS
+    required_shop_level: 12
+  light_gray_stained_glass_pane:
+    material: LIGHT_GRAY_STAINED_GLASS_PANE
+    required_shop_level: 12
+  cyan_stained_glass:
+    material: CYAN_STAINED_GLASS
+    required_shop_level: 12
+  cyan_stained_glass_pane:
+    material: CYAN_STAINED_GLASS_PANE
+    required_shop_level: 12
+  purple_stained_glass:
+    material: PURPLE_STAINED_GLASS
+    required_shop_level: 12
+  purple_stained_glass_pane:
+    material: PURPLE_STAINED_GLASS_PANE
+    required_shop_level: 12
+  blue_stained_glass:
+    material: BLUE_STAINED_GLASS
+    required_shop_level: 12
+  blue_stained_glass_pane:
+    material: BLUE_STAINED_GLASS_PANE
+    required_shop_level: 12
+  brown_stained_glass:
+    material: BROWN_STAINED_GLASS
+    required_shop_level: 12
+  brown_stained_glass_pane:
+    material: BROWN_STAINED_GLASS_PANE
+    required_shop_level: 12
+  green_stained_glass:
+    material: GREEN_STAINED_GLASS
+    required_shop_level: 12
+  green_stained_glass_pane:
+    material: GREEN_STAINED_GLASS_PANE
+    required_shop_level: 12
+  red_stained_glass:
+    material: RED_STAINED_GLASS
+    required_shop_level: 12
+  red_stained_glass_pane:
+    material: RED_STAINED_GLASS_PANE
+    required_shop_level: 12
+  black_stained_glass:
+    material: BLACK_STAINED_GLASS
+    required_shop_level: 12
+  black_stained_glass_pane:
+    material: BLACK_STAINED_GLASS_PANE
+    required_shop_level: 12
 nether:
   netherrack:
     material: NETHERRACK
@@ -119,3 +242,201 @@ end:
   purpur_pillar:
     material: PURPUR_PILLAR
     required_shop_level: 100
+terracotta:
+  terracotta:
+    material: TERRACOTTA
+    required_shop_level: 10
+  white_terracotta:
+    material: WHITE_TERRACOTTA
+    required_shop_level: 15
+  orange_terracotta:
+    material: ORANGE_TERRACOTTA
+    required_shop_level: 15
+  magenta_terracotta:
+    material: MAGENTA_TERRACOTTA
+    required_shop_level: 15
+  light_blue_terracotta:
+    material: LIGHT_BLUE_TERRACOTTA
+    required_shop_level: 15
+  yellow_terracotta:
+    material: YELLOW_TERRACOTTA
+    required_shop_level: 15
+  lime_terracotta:
+    material: LIME_TERRACOTTA
+    required_shop_level: 15
+  pink_terracotta:
+    material: PINK_TERRACOTTA
+    required_shop_level: 15
+  gray_terracotta:
+    material: GRAY_TERRACOTTA
+    required_shop_level: 15
+  light_gray_terracotta:
+    material: LIGHT_GRAY_TERRACOTTA
+    required_shop_level: 15
+  cyan_terracotta:
+    material: CYAN_TERRACOTTA
+    required_shop_level: 15
+  purple_terracotta:
+    material: PURPLE_TERRACOTTA
+    required_shop_level: 15
+  blue_terracotta:
+    material: BLUE_TERRACOTTA
+    required_shop_level: 15
+  brown_terracotta:
+    material: BROWN_TERRACOTTA
+    required_shop_level: 15
+  green_terracotta:
+    material: GREEN_TERRACOTTA
+    required_shop_level: 15
+  red_terracotta:
+    material: RED_TERRACOTTA
+    required_shop_level: 15
+  black_terracotta:
+    material: BLACK_TERRACOTTA
+    required_shop_level: 15
+concrete:
+  white_concrete:
+    material: WHITE_CONCRETE
+    required_shop_level: 20
+  orange_concrete:
+    material: ORANGE_CONCRETE
+    required_shop_level: 20
+  magenta_concrete:
+    material: MAGENTA_CONCRETE
+    required_shop_level: 20
+  light_blue_concrete:
+    material: LIGHT_BLUE_CONCRETE
+    required_shop_level: 20
+  yellow_concrete:
+    material: YELLOW_CONCRETE
+    required_shop_level: 20
+  lime_concrete:
+    material: LIME_CONCRETE
+    required_shop_level: 20
+  pink_concrete:
+    material: PINK_CONCRETE
+    required_shop_level: 20
+  gray_concrete:
+    material: GRAY_CONCRETE
+    required_shop_level: 20
+  light_gray_concrete:
+    material: LIGHT_GRAY_CONCRETE
+    required_shop_level: 20
+  cyan_concrete:
+    material: CYAN_CONCRETE
+    required_shop_level: 20
+  purple_concrete:
+    material: PURPLE_CONCRETE
+    required_shop_level: 20
+  blue_concrete:
+    material: BLUE_CONCRETE
+    required_shop_level: 20
+  brown_concrete:
+    material: BROWN_CONCRETE
+    required_shop_level: 20
+  green_concrete:
+    material: GREEN_CONCRETE
+    required_shop_level: 20
+  red_concrete:
+    material: RED_CONCRETE
+    required_shop_level: 20
+  black_concrete:
+    material: BLACK_CONCRETE
+    required_shop_level: 20
+  white_concrete_powder:
+    material: WHITE_CONCRETE_POWDER
+    required_shop_level: 15
+  orange_concrete_powder:
+    material: ORANGE_CONCRETE_POWDER
+    required_shop_level: 15
+  magenta_concrete_powder:
+    material: MAGENTA_CONCRETE_POWDER
+    required_shop_level: 15
+  light_blue_concrete_powder:
+    material: LIGHT_BLUE_CONCRETE_POWDER
+    required_shop_level: 15
+  yellow_concrete_powder:
+    material: YELLOW_CONCRETE_POWDER
+    required_shop_level: 15
+  lime_concrete_powder:
+    material: LIME_CONCRETE_POWDER
+    required_shop_level: 15
+  pink_concrete_powder:
+    material: PINK_CONCRETE_POWDER
+    required_shop_level: 15
+  gray_concrete_powder:
+    material: GRAY_CONCRETE_POWDER
+    required_shop_level: 15
+  light_gray_concrete_powder:
+    material: LIGHT_GRAY_CONCRETE_POWDER
+    required_shop_level: 15
+  cyan_concrete_powder:
+    material: CYAN_CONCRETE_POWDER
+    required_shop_level: 15
+  purple_concrete_powder:
+    material: PURPLE_CONCRETE_POWDER
+    required_shop_level: 15
+  blue_concrete_powder:
+    material: BLUE_CONCRETE_POWDER
+    required_shop_level: 15
+  brown_concrete_powder:
+    material: BROWN_CONCRETE_POWDER
+    required_shop_level: 15
+  green_concrete_powder:
+    material: GREEN_CONCRETE_POWDER
+    required_shop_level: 15
+  red_concrete_powder:
+    material: RED_CONCRETE_POWDER
+    required_shop_level: 15
+  black_concrete_powder:
+    material: BLACK_CONCRETE_POWDER
+    required_shop_level: 15
+wool:
+  white_wool:
+    material: WHITE_WOOL
+    required_shop_level: 10
+  orange_wool:
+    material: ORANGE_WOOL
+    required_shop_level: 10
+  magenta_wool:
+    material: MAGENTA_WOOL
+    required_shop_level: 10
+  light_blue_wool:
+    material: LIGHT_BLUE_WOOL
+    required_shop_level: 10
+  yellow_wool:
+    material: YELLOW_WOOL
+    required_shop_level: 10
+  lime_wool:
+    material: LIME_WOOL
+    required_shop_level: 10
+  pink_wool:
+    material: PINK_WOOL
+    required_shop_level: 10
+  gray_wool:
+    material: GRAY_WOOL
+    required_shop_level: 10
+  light_gray_wool:
+    material: LIGHT_GRAY_WOOL
+    required_shop_level: 10
+  cyan_wool:
+    material: CYAN_WOOL
+    required_shop_level: 10
+  purple_wool:
+    material: PURPLE_WOOL
+    required_shop_level: 10
+  blue_wool:
+    material: BLUE_WOOL
+    required_shop_level: 10
+  brown_wool:
+    material: BROWN_WOOL
+    required_shop_level: 10
+  green_wool:
+    material: GREEN_WOOL
+    required_shop_level: 10
+  red_wool:
+    material: RED_WOOL
+    required_shop_level: 10
+  black_wool:
+    material: BLACK_WOOL
+    required_shop_level: 10
