@@ -1,5 +1,5 @@
 name: HereShoppy
-version: 1.2.3
+version: '${version}'
 main: com.hereshoppy.hereshoppy.HereShoppyPlugin
 api-version: '1.21'
 description: A comprehensive economy, shop progression, and item generation plugin.
