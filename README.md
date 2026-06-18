@@ -65,7 +65,7 @@ Plugins can interact with the economy via `com.hereshoppy.hereshoppy.api.Heresho
 - `removeKroins(UUID uuid, double amount)`
 - `getLevel(UUID uuid)`
 
-## Recent Changes (v1.2.3)
+## Recent Changes (v1.2.4)
 
 - **Modern Items Catalog Synchronization** — Synchronized the shop catalog with the latest Minecraft features (1.21 Tricky Trials & 26.1 "Tiny Takeover" visual/QoL drop), introducing **Wind Charge** (`WIND_CHARGE`) to the mob drops category and the **Golden Dandelion** (`GOLDEN_DANDELION`) age-halting flower to the flower category.
 - **Robust Auto-Merging Configurations** — Built-in automated synchronization detects missing default items on plugin startup and safely merges them into existing server configuration files, maintaining custom economy balances.
@@ -90,7 +90,7 @@ Plugins can interact with the economy via `com.hereshoppy.hereshoppy.api.Heresho
 
 ## Version
 
-Current release: **`1.2.3`**
+Current release: **`1.2.4`**
 
 ## License
 Licensed under [GNU GPLv3](LICENSE).
