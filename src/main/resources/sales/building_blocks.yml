@@ -440,3 +440,13 @@ wool:
   black_wool:
     material: BLACK_WOOL
     required_shop_level: 10
+pale_moss:
+  pale_moss_block:
+    material: PALE_MOSS_BLOCK
+    required_shop_level: 75
+  pale_moss_carpet:
+    material: PALE_MOSS_CARPET
+    required_shop_level: 75
+  pale_hanging_moss:
+    material: PALE_HANGING_MOSS
+    required_shop_level: 75

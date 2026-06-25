@@ -3,11 +3,12 @@ plugins {
 }
 
 group = 'com.hereshoppy'
-version = '1.2.4'
+version = '1.2.5'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
 }
 
 repositories {
@@ -16,7 +17,15 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT'
+    compileOnly 'io.papermc.paper:paper-api:26.1.2.build.+'
+}
+
+task runDumper(type: JavaExec) {
+    classpath = sourceSets.main.output + sourceSets.main.compileClasspath
+    mainClass = 'com.hereshoppy.hereshoppy.MaterialDumper'
+    javaLauncher = javaToolchains.launcherFor {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
 }
 
 processResources {

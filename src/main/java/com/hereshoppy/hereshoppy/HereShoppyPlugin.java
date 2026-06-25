@@ -15,6 +15,7 @@ public class HereShoppyPlugin extends JavaPlugin {
     private ItemManager itemManager;
     private NamespacedKey shopBoughtTimeKey;
     private NamespacedKey shopItemKey;
+    private NamespacedKey bobKey;
 
     @Override
     public void onEnable() {
@@ -22,8 +23,18 @@ public class HereShoppyPlugin extends JavaPlugin {
         saveDefaultConfig();
         this.shopBoughtTimeKey = new NamespacedKey(this, "shop_bought_time");
         this.shopItemKey = new NamespacedKey(this, "shop_item_key");
+        this.bobKey = new NamespacedKey(this, "is_bob");
         this.dataManager = new DataManager(this);
         this.itemManager = new ItemManager(this);
+
+        // Clean up any residual Bob entities to prevent duplicates on reload
+        for (org.bukkit.World world : getServer().getWorlds()) {
+            for (org.bukkit.entity.WanderingTrader trader : world.getEntitiesByClass(org.bukkit.entity.WanderingTrader.class)) {
+                if (trader.getPersistentDataContainer().has(bobKey, org.bukkit.persistence.PersistentDataType.BYTE)) {
+                    trader.remove();
+                }
+            }
+        }
 
         // Register Commands
         HereShoppyCommand cmd = new HereShoppyCommand(this);
@@ -81,5 +92,9 @@ public class HereShoppyPlugin extends JavaPlugin {
 
     public int getResaleCooldownHours() {
         return getConfig().getInt("resale-cooldown-hours", 24);
+    }
+
+    public NamespacedKey getBobKey() {
+        return bobKey;
     }
 }

@@ -4,13 +4,17 @@ import com.hereshoppy.hereshoppy.HereShoppyPlugin;
 import com.hereshoppy.hereshoppy.api.HereshoppyAPI;
 import com.hereshoppy.hereshoppy.gui.ShopGUI;
 import com.hereshoppy.hereshoppy.shop.ItemManager;
+import com.hereshoppy.hereshoppy.shop.BobShopHolder;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.WanderingTrader;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
@@ -18,16 +22,31 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class ShopListener implements Listener {
+
+    private static WanderingTrader activeBob = null;
+    private static Inventory bobInventory = null;
+    private static BukkitTask bobFollowTask = null;
+
+    private static final Material[] BOB_ITEMS_POOL = {
+        Material.NETHERITE_SWORD, Material.DIAMOND_SWORD, Material.IRON_SWORD,
+        Material.NETHERITE_PICKAXE, Material.DIAMOND_PICKAXE, Material.IRON_PICKAXE,
+        Material.NETHERITE_AXE, Material.DIAMOND_AXE, Material.IRON_AXE,
+        Material.NETHERITE_SHOVEL, Material.DIAMOND_SHOVEL, Material.IRON_SHOVEL,
+        Material.NETHERITE_HOE, Material.DIAMOND_HOE, Material.IRON_HOE,
+        Material.BOW, Material.CROSSBOW, Material.TRIDENT, Material.SHEARS, Material.FISHING_ROD
+    };
 
     private final Map<UUID, ShopGUI.SearchFilterState> activeChatSearches = new HashMap<>();
 
@@ -38,6 +57,12 @@ public class ShopListener implements Listener {
         Inventory topInv = event.getView().getTopInventory();
         InventoryHolder holder = topInv.getHolder();
         if (holder == null) return;
+
+        if (holder instanceof BobShopHolder) {
+            event.setCancelled(true);
+            handleBobShopClick(player, event);
+            return;
+        }
 
         // Ensure we are dealing with our shop
         if (!(holder instanceof ShopGUI.MainMenuHolder || 
@@ -246,7 +271,8 @@ public class ShopListener implements Listener {
         if (holder instanceof ShopGUI.MainMenuHolder || 
             holder instanceof ShopGUI.CategoryMenuHolder || 
             holder instanceof ShopGUI.SearchMenuHolder ||
-            holder instanceof ShopGUI.AlphabetMenuHolder) {
+            holder instanceof ShopGUI.AlphabetMenuHolder ||
+            holder instanceof BobShopHolder) {
             
             // Cancel any drag that affects the top inventory
             for (int rawSlot : event.getRawSlots()) {
@@ -388,6 +414,9 @@ public class ShopListener implements Listener {
         String displayName = clickedMeta.hasDisplayName() ? plainText(clickedMeta.displayName()) : formatMaterialName(clicked.getType());
         player.sendMessage(Component.text("Purchased " + clicked.getAmount() + "x " + displayName + " for " + String.format("%.2f", price) + " Kroins.", NamedTextColor.GREEN));
         player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f);
+
+        // Spawn Bob check
+        checkBobSpawn(player);
     }
 
     private String plainText(Component component) {
@@ -452,5 +481,193 @@ public class ShopListener implements Listener {
             default -> "ALL";
         };
         state.setAvailability(next);
+    }
+
+    // --- Bob the Shady Merchant Spawning & Interaction Logic ---
+
+    @EventHandler
+    public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+        if (event.getRightClicked() instanceof WanderingTrader trader) {
+            HereShoppyPlugin plugin = HereShoppyPlugin.getInstance();
+            if (trader.getPersistentDataContainer().has(plugin.getBobKey(), PersistentDataType.BYTE)) {
+                event.setCancelled(true);
+                Player player = event.getPlayer();
+                if (bobInventory == null) {
+                    bobInventory = createBobInventory();
+                }
+                player.openInventory(bobInventory);
+                player.playSound(player.getLocation(), Sound.ENTITY_WANDERING_TRADER_TRADE, 1f, 1f);
+            }
+        }
+    }
+
+    private void handleBobShopClick(Player player, InventoryClickEvent event) {
+        int slot = event.getRawSlot();
+        if (slot < 0 || slot >= 9) return;
+
+        ItemStack clicked = event.getCurrentItem();
+        if (clicked == null || clicked.getType() == Material.AIR || clicked.getType() == Material.GRAY_STAINED_GLASS_PANE) {
+            return;
+        }
+
+        if (clicked.getType() == Material.RED_STAINED_GLASS_PANE) {
+            player.sendMessage(Component.text("This item is already sold out!", NamedTextColor.RED));
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1f, 1f);
+            return;
+        }
+
+        double price = 100000.0;
+        double balance = HereshoppyAPI.getKroins(player.getUniqueId());
+
+        if (balance < price) {
+            player.sendMessage(Component.text("You don't have enough Kroins! Bob requires 100,000 Kroins.", NamedTextColor.RED));
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, 1f, 1f);
+            return;
+        }
+
+        HereshoppyAPI.removeKroins(player.getUniqueId(), price);
+        HereshoppyAPI.addShopXp(player.getUniqueId(), (int) price);
+
+        ItemStack toGive = clicked.clone();
+        ItemMeta meta = toGive.getItemMeta();
+        if (meta != null) {
+            List<Component> lore = meta.lore();
+            if (lore != null && lore.size() >= 3) {
+                lore.subList(lore.size() - 3, lore.size()).clear();
+                meta.lore(lore.isEmpty() ? null : lore);
+            }
+            HereShoppyPlugin plugin = HereShoppyPlugin.getInstance();
+            meta.getPersistentDataContainer().set(plugin.getShopBoughtTimeKey(), PersistentDataType.LONG, System.currentTimeMillis());
+            toGive.setItemMeta(meta);
+        }
+
+        player.getInventory().addItem(toGive).values().forEach(remaining -> player.getWorld().dropItemNaturally(player.getLocation(), remaining));
+
+        ItemStack soldOut = new ItemStack(Material.RED_STAINED_GLASS_PANE);
+        ItemMeta soldMeta = soldOut.getItemMeta();
+        if (soldMeta != null) {
+            soldMeta.displayName(Component.text("SOLD OUT", NamedTextColor.RED).decoration(net.kyori.adventure.text.format.TextDecoration.BOLD, true).decoration(net.kyori.adventure.text.format.TextDecoration.ITALIC, false));
+            soldOut.setItemMeta(soldMeta);
+        }
+        bobInventory.setItem(slot, soldOut);
+
+        player.sendMessage(Component.text("Successfully purchased " + formatMaterialName(clicked.getType()) + " for 100,000 Kroins!", NamedTextColor.GREEN));
+        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.5f);
+        player.getWorld().spawnParticle(org.bukkit.Particle.HAPPY_VILLAGER, player.getLocation(), 20, 0.5, 1.0, 0.5, 0.1);
+    }
+
+    private void checkBobSpawn(Player player) {
+        HereShoppyPlugin plugin = HereShoppyPlugin.getInstance();
+        if (!Bukkit.getPluginManager().isPluginEnabled("HereMobby")) {
+            return;
+        }
+        if (activeBob != null && activeBob.isValid() && !activeBob.isDead()) {
+            return;
+        }
+
+        if (new Random().nextDouble() >= 0.01) {
+            return;
+        }
+
+        Location loc = player.getLocation();
+        activeBob = loc.getWorld().spawn(loc, WanderingTrader.class, trader -> {
+            trader.customName(Component.text("Bob the Shady Merchant", NamedTextColor.GOLD).decoration(net.kyori.adventure.text.format.TextDecoration.BOLD, true));
+            trader.setCustomNameVisible(true);
+            trader.setRemoveWhenFarAway(false);
+            trader.setDespawnDelay(24000);
+            trader.getPersistentDataContainer().set(plugin.getBobKey(), PersistentDataType.BYTE, (byte) 1);
+        });
+
+        bobInventory = createBobInventory();
+
+        player.sendMessage(Component.text("✨ A shady figure emerges from the shadows... Bob the Shady Merchant has arrived!", NamedTextColor.GOLD));
+        player.playSound(player.getLocation(), Sound.ENTITY_WANDERING_TRADER_YES, 1f, 1f);
+
+        UUID playerUuid = player.getUniqueId();
+        if (bobFollowTask != null) {
+            bobFollowTask.cancel();
+        }
+        bobFollowTask = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
+            if (activeBob == null || !activeBob.isValid() || activeBob.isDead()) {
+                cleanupBob();
+                return;
+            }
+            Player target = Bukkit.getPlayer(playerUuid);
+            if (target == null || !target.isOnline()) {
+                return;
+            }
+            if (!activeBob.getWorld().equals(target.getWorld())) {
+                activeBob.teleport(target.getLocation());
+                return;
+            }
+            double distSq = activeBob.getLocation().distanceSquared(target.getLocation());
+            if (distSq > 400) {
+                activeBob.teleport(target.getLocation());
+                activeBob.getWorld().spawnParticle(org.bukkit.Particle.POOF, activeBob.getLocation(), 10);
+            } else if (distSq > 9) {
+                activeBob.getPathfinder().moveTo(target, 1.25);
+            }
+        }, 20L, 20L);
+
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            if (activeBob != null && activeBob.isValid()) {
+                activeBob.getWorld().spawnParticle(org.bukkit.Particle.POOF, activeBob.getLocation(), 10);
+                activeBob.getWorld().playSound(activeBob.getLocation(), Sound.ENTITY_WANDERING_TRADER_DISAPPEARED, 1f, 1f);
+                activeBob.remove();
+            }
+            cleanupBob();
+        }, 6000L);
+    }
+
+    private Inventory createBobInventory() {
+        HereShoppyPlugin plugin = HereShoppyPlugin.getInstance();
+        BobShopHolder holder = new BobShopHolder();
+        Inventory inv = Bukkit.createInventory(holder, 9, Component.text("Bob's Shady Goods", NamedTextColor.DARK_RED).decoration(net.kyori.adventure.text.format.TextDecoration.BOLD, true));
+        holder.setInventory(inv);
+
+        ItemStack glass = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
+        ItemMeta glassMeta = glass.getItemMeta();
+        if (glassMeta != null) {
+            glassMeta.displayName(Component.empty());
+            glass.setItemMeta(glassMeta);
+        }
+        for (int i = 0; i < 9; i++) {
+            inv.setItem(i, glass);
+        }
+
+        Random random = new Random();
+        List<Material> pool = new ArrayList<>(Arrays.asList(BOB_ITEMS_POOL));
+        Collections.shuffle(pool, random);
+
+        int[] slots = {2, 3, 4, 5, 6};
+        for (int i = 0; i < 5; i++) {
+            Material mat = pool.get(i);
+            ItemStack base = new ItemStack(mat);
+            ItemStack enchanted = base.enchantWithLevels(15, true, random);
+            ItemMeta meta = enchanted.getItemMeta();
+            if (meta != null) {
+                List<Component> lore = new ArrayList<>();
+                if (meta.lore() != null) {
+                    lore.addAll(meta.lore());
+                }
+                lore.add(Component.text("--------------------", NamedTextColor.GRAY).decoration(net.kyori.adventure.text.format.TextDecoration.ITALIC, false));
+                lore.add(Component.text("Price: 100,000 Kroins", NamedTextColor.GOLD).decoration(net.kyori.adventure.text.format.TextDecoration.ITALIC, false));
+                lore.add(Component.text("Click to Purchase", NamedTextColor.YELLOW).decoration(net.kyori.adventure.text.format.TextDecoration.ITALIC, false));
+                meta.lore(lore);
+                enchanted.setItemMeta(meta);
+            }
+            inv.setItem(slots[i], enchanted);
+        }
+
+        return inv;
+    }
+
+    private void cleanupBob() {
+        if (bobFollowTask != null) {
+            bobFollowTask.cancel();
+            bobFollowTask = null;
+        }
+        activeBob = null;
+        bobInventory = null;
     }
 }
